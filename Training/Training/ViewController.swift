@@ -11,16 +11,16 @@ import YumemiWeather
 class ViewController: UIViewController {
     
     @IBOutlet weak var weatherIcon: UIImageView!
-    var icon : UIImage!
-    var icon2 : UIImage!
-    var icon3 : UIImage!
+    private var sunnyIcon : UIImage!
+    private var cloudyIcon : UIImage!
+    private var rainyIcon : UIImage!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        icon = UIImage(named: "sunny")
-        icon2 = UIImage(named: "cloudy")
-        icon3 = UIImage(named: "rainy")
+        sunnyIcon = UIImage(named: "sunny")?.withTintColor(UIColor.red)
+        cloudyIcon = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
+        rainyIcon = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
         
     }
     
@@ -28,13 +28,13 @@ class ViewController: UIViewController {
         let weather = YumemiWeather.fetchWeatherCondition()
         switch weather {
         case "sunny":
-            weatherIcon.image = icon
+            weatherIcon.image = sunnyIcon
         case "cloudy":
-            weatherIcon.image = icon2
+            weatherIcon.image = cloudyIcon
         case "rainy":
-            weatherIcon.image = icon3
+            weatherIcon.image = rainyIcon
         default:
-            weatherIcon.image = icon
+            weatherIcon.image = sunnyIcon
         }
     
     }
