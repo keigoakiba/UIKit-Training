@@ -24,6 +24,9 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Reload"/>
+                                <connections>
+                                    <action selector="fetchWeather:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YhX-3B-sg9"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qvA-bL-xA8">
                                 <rect key="frame" x="97.666666666666686" y="610" width="97.333333333333314" height="31"/>
@@ -44,7 +47,6 @@
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E81-ak-YiP">
                                 <rect key="frame" x="97.666666666666686" y="314" width="195" height="195"/>
-                                <color key="backgroundColor" name="AccentColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="E81-ak-YiP" secondAttribute="height" multiplier="1:1" id="fWW-7x-Tal"/>
                                 </constraints>
@@ -80,6 +82,9 @@
                             <constraint firstItem="E81-ak-YiP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="w6d-Kg-iPh"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="weatherIcon" destination="E81-ak-YiP" id="L3h-rs-aYL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
