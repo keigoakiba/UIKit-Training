@@ -38,6 +38,10 @@ class ViewController: UIViewController {
         }
     
     }
-
+    
+    @IBAction func closeViewCon() {
+           self.dismiss(animated: true, completion: nil)
+       }
+    
 }
 
