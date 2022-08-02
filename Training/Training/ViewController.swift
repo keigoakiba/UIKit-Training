@@ -8,34 +8,62 @@
 import UIKit
 import YumemiWeather
 
-class ViewController: UIViewController {
+/*
+var sunnyIcon : UIImage!
+var cloudyIcon : UIImage!
+var rainyIcon : UIImage!
+*/
+ 
+
+//プロトコル
+protocol ButtonDelegate {
+    func fetchWeather() -> UIImageView
+}
+
+//処理内容を記したクラス
+class Detail: ButtonDelegate {
     
-    @IBOutlet weak var weatherIcon: UIImageView!
-    private var sunnyIcon : UIImage!
-    private var cloudyIcon : UIImage!
-    private var rainyIcon : UIImage!
+    var sunnyIcon = UIImage(named: "sunny")?.withTintColor(UIColor.red)
+    var cloudyIcon = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
+    var rainyIcon = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
+
+    private var weatherIconBase: UIImageView!
+    
+    func fetchWeather() -> UIImageView {
+        print("目印")
+        print(sunnyIcon)
+        let weather = YumemiWeather.fetchWeatherCondition()
+        switch weather {
+        case "sunny":
+            weatherIconBase.image = sunnyIcon
+            return weatherIconBase
+        case "cloudy":
+            weatherIconBase.image = cloudyIcon
+            return weatherIconBase
+        case "rainy":
+            weatherIconBase.image = rainyIcon
+            return weatherIconBase
+        default:
+            weatherIconBase.image = sunnyIcon
+            return weatherIconBase
+        }
+    }
+}
+
+//実際に処理が動くクラス
+class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sunnyIcon = UIImage(named: "sunny")?.withTintColor(UIColor.red)
-        cloudyIcon = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
-        rainyIcon = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
-        
     }
     
+    @IBOutlet var weatherIcon: UIImageView!
+    
     @IBAction func fetchWeather(_ sender: Any) {
-        let weather = YumemiWeather.fetchWeatherCondition()
-        switch weather {
-        case "sunny":
-            weatherIcon.image = sunnyIcon
-        case "cloudy":
-            weatherIcon.image = cloudyIcon
-        case "rainy":
-            weatherIcon.image = rainyIcon
-        default:
-            weatherIcon.image = sunnyIcon
-        }
+        let detail = Detail()
+        let weatherIconBase = detail.fetchWeather()
+        weatherIcon = weatherIconBase
     
     }
     

@@ -87,7 +87,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="eOJ-XR-hkj"/>
                     <connections>
-                        <outlet property="weatherIcon" destination="E81-ak-YiP" id="L3h-rs-aYL"/>
+                        <outlet property="weatherIcon" destination="E81-ak-YiP" id="QEQ-IF-VmJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
