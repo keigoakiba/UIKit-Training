@@ -17,35 +17,30 @@ var rainyIcon : UIImage!
 
 //プロトコル
 protocol ButtonDelegate {
-    func fetchWeather() -> UIImageView
+    func fetchWeather() -> UIImage?
 }
 
 //処理内容を記したクラス
 class Detail: ButtonDelegate {
     
+    /*
     var sunnyIcon = UIImage(named: "sunny")?.withTintColor(UIColor.red)
     var cloudyIcon = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
     var rainyIcon = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
-
-    private var weatherIconBase: UIImageView!
-    
-    func fetchWeather() -> UIImageView {
+    */
+     
+    func fetchWeather() -> UIImage? {
         print("目印")
-        print(sunnyIcon)
         let weather = YumemiWeather.fetchWeatherCondition()
         switch weather {
         case "sunny":
-            weatherIconBase.image = sunnyIcon
-            return weatherIconBase
+            return UIImage(named: "sunny")?.withTintColor(UIColor.red)
         case "cloudy":
-            weatherIconBase.image = cloudyIcon
-            return weatherIconBase
+            return UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
         case "rainy":
-            weatherIconBase.image = rainyIcon
-            return weatherIconBase
+            return UIImage(named: "rainy")?.withTintColor(UIColor.blue)
         default:
-            weatherIconBase.image = sunnyIcon
-            return weatherIconBase
+            return UIImage(named: "sunny")?.withTintColor(UIColor.red)
         }
     }
 }
@@ -62,8 +57,8 @@ class ViewController: UIViewController {
     
     @IBAction func fetchWeather(_ sender: Any) {
         let detail = Detail()
-        let weatherIconBase = detail.fetchWeather()
-        weatherIcon = weatherIconBase
+        let weatherIconBase: UIImage? = detail.fetchWeather()
+        weatherIcon.image = weatherIconBase!
     
     }
     
