@@ -74,6 +74,11 @@ class ViewController: UIViewController {
     @IBAction func closeViewCon() {
            self.dismiss(animated: true, completion: nil)
        }
+    
+    deinit {
+        let dt: Date = Date()
+        print(dt)
+    }
 
 }
 
