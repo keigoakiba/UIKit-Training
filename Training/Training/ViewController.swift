@@ -14,14 +14,12 @@ class ViewController: UIViewController {
     private var sunnyIcon : UIImage!
     private var cloudyIcon : UIImage!
     private var rainyIcon : UIImage!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         sunnyIcon = UIImage(named: "sunny")?.withTintColor(UIColor.red)
         cloudyIcon = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
         rainyIcon = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
-        
     }
     
     @IBAction func fetchWeather(_ sender: Any) {
@@ -36,12 +34,10 @@ class ViewController: UIViewController {
         default:
             weatherIcon.image = sunnyIcon
         }
-    
     }
     
     @IBAction func closeViewCon() {
-           self.dismiss(animated: true, completion: nil)
-       }
+        self.dismiss(animated: true, completion: nil)
+    }
     
 }
-
