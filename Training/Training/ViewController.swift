@@ -7,7 +7,6 @@
 
 import UIKit
 import YumemiWeather
- 
 
 //プロトコル
 protocol forecastDelegate: AnyObject {
@@ -35,23 +34,22 @@ class Detail: forecastDelegate {
 
 //処理を任せるクラス
 class Forecast {
-    
     //weak必須
     weak var delegate: forecastDelegate? = nil
     
     func click() -> UIImage? {
-            if let dg = self.delegate {
-                return dg.fetchWeather()
-            } else {
-                return nil
-            }
+        if let dg = self.delegate {
+            return dg.fetchWeather()
+        } else {
+            return nil
         }
+    }
     
 }
 
 //実際に処理が動くクラス(画面)
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -71,14 +69,15 @@ class ViewController: UIViewController {
         }
     }
     
+    //天気予報画面を閉じる
     @IBAction func closeViewCon() {
-           self.dismiss(animated: true, completion: nil)
-       }
+        self.dismiss(animated: true, completion: nil)
+    }
     
+    //ログ出力
     deinit {
         let dt: Date = Date()
         print(dt)
     }
-
+    
 }
-
