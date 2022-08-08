@@ -17,22 +17,22 @@ protocol forecastDelegate: AnyObject {
 }
 
 //処理内容を記した、処理を任されるクラスその1
-class Detail: forecastDelegate {
+class YumemiForecast: forecastDelegate {
     
     func fetchWeather() -> UIImage? {
         var weather: String?
         do {
             try weather = YumemiWeather.fetchWeatherCondition(at: "tokyo")
         } /*catch (YumemiWeatherError.invalidParameterError) {
-            errorMessage = "invalidParameterErrorが発生しました"
-            return nil
-        }*/ catch (YumemiWeatherError.unknownError) {
-            errorMessage = "unknownErrorが発生しました"
-            return nil
-        } catch {
-            errorMessage = "予期せぬエラーが発生しました"
-            return nil
-        }
+           errorMessage = "invalidParameterErrorが発生しました"
+           return nil
+           }*/ catch (YumemiWeatherError.unknownError) {
+               errorMessage = "unknownErrorが発生しました"
+               return nil
+           } catch {
+               errorMessage = "予期せぬエラーが発生しました"
+               return nil
+           }
         if let weatherNotNil = weather {
             switch weatherNotNil {
             case "sunny":
@@ -56,7 +56,7 @@ class Forecast {
     //weak必須
     weak var delegate: forecastDelegate? = nil
     
-    func click() -> UIImage? {
+    func doFetchWeather() -> UIImage? {
         if let dg = self.delegate {
             return dg.fetchWeather()
         } else {
@@ -83,7 +83,6 @@ class CreateAlertController {
         alert.addAction(yesAction)
         alert.addAction(noAction)
         
-        // alert.present(alert, animated: true, completion: nil)
         return alert
     }
 }
@@ -95,17 +94,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @IBOutlet var weatherIcon: UIImageView!
+    @IBOutlet var weather: UIImageView!
     
     @IBAction func fetchWeather(_ sender: Any) {
         //処理を任せるクラスのインスタンス生成
         let forecast = Forecast()
         //今回処理を任されるクラスのインスタンス生成 と紐付け
-        let detail = Detail()
-        forecast.delegate = detail
+        let yumemiForecast = YumemiForecast()
+        forecast.delegate = yumemiForecast
         
-        let weatherIconBase: UIImage?
-        weatherIconBase = forecast.click()
+        let weatherIcon: UIImage? = forecast.doFetchWeather()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
         if let message = errorMessage  {
@@ -116,10 +114,11 @@ class ViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
         } else {
             //exceptionのルートを通っていなかったら天気画像を表示
-            if let iconCheck = weatherIconBase {
-                weatherIcon.image = iconCheck
+            if let icon = weatherIcon {
+                weather.image = icon
             }
         }
+        
     }
     
     //天気予報画面を閉じる
@@ -132,5 +131,5 @@ class ViewController: UIViewController {
         let dt: Date = Date()
         print(dt)
     }
-    
+
 }
