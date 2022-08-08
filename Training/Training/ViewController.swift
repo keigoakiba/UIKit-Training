@@ -115,6 +115,7 @@ class CreateAlertController {
         // alert.present(alert, animated: true, completion: nil)
         return alert
     }
+    
 }
 
 //実際に処理が動くクラス(画面)
@@ -154,7 +155,6 @@ class ViewController: UIViewController {
                 maxTemperature.text = "\(receiveInfoExist.max_temperature)"
                 minTemperature.text = "\(receiveInfoExist.min_temperature)"
             }
-            
         }
     }
     
