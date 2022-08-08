@@ -87,6 +87,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="eOJ-XR-hkj"/>
                     <connections>
+                        <outlet property="maxTemperature" destination="YSp-Kv-Pj0" id="KQ8-Zw-fyR"/>
+                        <outlet property="minTemperature" destination="0BT-i2-Lym" id="M0W-oN-K8h"/>
                         <outlet property="weatherIcon" destination="E81-ak-YiP" id="QEQ-IF-VmJ"/>
                     </connections>
                 </viewController>
