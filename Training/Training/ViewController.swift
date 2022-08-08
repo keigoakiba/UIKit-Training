@@ -102,7 +102,6 @@ class ViewController: UIViewController {
         //今回処理を任されるクラスのインスタンス生成 と紐付け
         let yumemiForecast = YumemiForecast()
         forecast.delegate = yumemiForecast
-        
         let weatherIcon: UIImage? = forecast.doFetchWeather()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
@@ -118,7 +117,6 @@ class ViewController: UIViewController {
                 weather.image = icon
             }
         }
-        
     }
     
     //天気予報画面を閉じる
@@ -131,5 +129,5 @@ class ViewController: UIViewController {
         let dt: Date = Date()
         print(dt)
     }
-
+    
 }
