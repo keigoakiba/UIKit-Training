@@ -14,11 +14,11 @@ protocol forecastDelegate: AnyObject {
 }
 
 //処理内容を記した、処理を任されるクラスその1
-class Detail: forecastDelegate {
+class YumemiForecast: forecastDelegate {
     
     func fetchWeather() -> UIImage? {
-        let weather = YumemiWeather.fetchWeatherCondition()
-        switch weather {
+        let weatherResult = YumemiWeather.fetchWeatherCondition()
+        switch weatherResult {
         case "sunny":
             return UIImage(named: "sunny")?.withTintColor(UIColor.red)
         case "cloudy":
@@ -37,7 +37,7 @@ class Forecast {
     //weak必須
     weak var delegate: forecastDelegate? = nil
     
-    func click() -> UIImage? {
+    func doFetchWeather() -> UIImage? {
         if let dg = self.delegate {
             return dg.fetchWeather()
         } else {
@@ -54,18 +54,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @IBOutlet var weatherIcon: UIImageView!
+    @IBOutlet var weather: UIImageView!
     
     @IBAction func fetchWeather(_ sender: Any) {
         //処理を任せるクラスのインスタンス生成
         let forecast = Forecast()
         //今回処理を任されるクラスのインスタンス生成 と紐付け
-        let detail = Detail()
-        forecast.delegate = detail
+        let yumemiForecast = YumemiForecast()
+        forecast.delegate = yumemiForecast
         
-        let weatherIconBase: UIImage? = forecast.click()
-        if let iconCheck = weatherIconBase {
-            weatherIcon.image = iconCheck
+        let weatherIcon: UIImage? = forecast.doFetchWeather()
+        if let icon = weatherIcon {
+            weather.image = icon
         }
     }
     
