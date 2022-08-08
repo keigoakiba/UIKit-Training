@@ -87,7 +87,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="eOJ-XR-hkj"/>
                     <connections>
-                        <outlet property="weatherIcon" destination="E81-ak-YiP" id="L3h-rs-aYL"/>
+                        <outlet property="weather" destination="E81-ak-YiP" id="w8P-vs-ZeT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -101,23 +101,8 @@
                     <view key="view" contentMode="scaleToFill" id="vDz-Qc-Zb4">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGd-bm-7HM">
-                                <rect key="frame" x="146" y="388" width="98" height="68"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="68" id="q9Q-YQ-lIF"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="画面遷移"/>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="B7X-0K-tGb"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="vGd-bm-7HM" firstAttribute="centerX" secondItem="vDz-Qc-Zb4" secondAttribute="centerX" id="1yz-Z0-byU"/>
-                            <constraint firstItem="vGd-bm-7HM" firstAttribute="centerY" secondItem="vDz-Qc-Zb4" secondAttribute="centerY" id="lRa-Eh-1oc"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fDf-fJ-oQU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

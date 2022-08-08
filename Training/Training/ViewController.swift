@@ -8,36 +8,76 @@
 import UIKit
 import YumemiWeather
 
-class ViewController: UIViewController {
+//プロトコル
+protocol forecastDelegate: AnyObject {
+    func fetchWeather() -> UIImage?
+}
+
+//処理内容を記した、処理を任されるクラスその1
+class YumemiForecast: forecastDelegate {
     
-    @IBOutlet weak var weatherIcon: UIImageView!
-    private var sunnyIcon : UIImage!
-    private var cloudyIcon : UIImage!
-    private var rainyIcon : UIImage!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        sunnyIcon = UIImage(named: "sunny")?.withTintColor(UIColor.red)
-        cloudyIcon = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
-        rainyIcon = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
-    }
-    
-    @IBAction func fetchWeather(_ sender: Any) {
-        let weather = YumemiWeather.fetchWeatherCondition()
-        switch weather {
+    func fetchWeather() -> UIImage? {
+        let weatherResult = YumemiWeather.fetchWeatherCondition()
+        switch weatherResult {
         case "sunny":
-            weatherIcon.image = sunnyIcon
+            return UIImage(named: "sunny")?.withTintColor(UIColor.red)
         case "cloudy":
-            weatherIcon.image = cloudyIcon
+            return UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
         case "rainy":
-            weatherIcon.image = rainyIcon
+            return UIImage(named: "rainy")?.withTintColor(UIColor.blue)
         default:
-            weatherIcon.image = sunnyIcon
+            return UIImage(named: "sunny")?.withTintColor(UIColor.red)
         }
     }
     
+}
+
+//処理を任せるクラス
+class Forecast {
+    //weak必須
+    weak var delegate: forecastDelegate? = nil
+    
+    func doFetchWeather() -> UIImage? {
+        if let dg = self.delegate {
+            return dg.fetchWeather()
+        } else {
+            return nil
+        }
+    }
+    
+}
+
+//実際に処理が動くクラス(画面)
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBOutlet var weather: UIImageView!
+    
+    @IBAction func fetchWeather(_ sender: Any) {
+        //処理を任せるクラスのインスタンス生成
+        let forecast = Forecast()
+        //今回処理を任されるクラスのインスタンス生成 と紐付け
+        let yumemiForecast = YumemiForecast()
+        forecast.delegate = yumemiForecast
+        
+        let weatherIcon: UIImage? = forecast.doFetchWeather()
+        if let icon = weatherIcon {
+            weather.image = icon
+        }
+    }
+    
+    //天気予報画面を閉じる
     @IBAction func closeViewCon() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    //ログ出力
+    deinit {
+        let dt: Date = Date()
+        print(dt)
     }
     
 }

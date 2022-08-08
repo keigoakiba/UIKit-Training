@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		73248AF12891203500D53AD1 /* YumemiWeather in Frameworks */ = {isa = PBXBuildFile; productRef = 73248AF02891203500D53AD1 /* YumemiWeather */; };
 		7339727728939872005447F3 /* PreviousDisplayViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */; };
+		7355B9082899138800DF50B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772108288F80E60057786D /* ViewController.swift */; };
 		73772105288F80E60057786D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772104288F80E60057786D /* AppDelegate.swift */; };
 		73772107288F80E60057786D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772106288F80E60057786D /* SceneDelegate.swift */; };
-		73772109288F80E60057786D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772108288F80E60057786D /* ViewController.swift */; };
 		7377210C288F80E60057786D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7377210A288F80E60057786D /* Main.storyboard */; };
 		7377210E288F80E70057786D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7377210D288F80E70057786D /* Assets.xcassets */; };
 		73772111288F80E70057786D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7377210F288F80E70057786D /* LaunchScreen.storyboard */; };
@@ -149,9 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73772109288F80E60057786D /* ViewController.swift in Sources */,
 				73772105288F80E60057786D /* AppDelegate.swift in Sources */,
 				73772107288F80E60057786D /* SceneDelegate.swift in Sources */,
+				7355B9082899138800DF50B1 /* ViewController.swift in Sources */,
 				7339727728939872005447F3 /* PreviousDisplayViewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
