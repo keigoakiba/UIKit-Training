@@ -9,17 +9,25 @@ import UIKit
 import YumemiWeather
 
 //APIに渡すJson文字列の器
-struct ServeInfo: Encodable {
+struct ServeInfo: Codable {
     var area: String
     var date: String
 }
 
 //APIから受け取るJson文字列の器
-struct ReceiveInfo: Decodable {
-    var weather_condition: String
-    var max_temperature:Int
-    var min_temperature: Int
+struct ReceiveInfo: Codable {
+    var weatherCondition: String
+    var maxTemperature:Int
+    var minTemperature: Int
     var date: String
+}
+
+//Swift命名規則に則る変数で受け取るための列挙型
+enum CodingKeys: String, CodingKey {
+    case weatherCondition = "weather_condition"
+    case maxTemperature
+    case minTemperature
+    case date
 }
 
 //プロトコル
@@ -63,7 +71,7 @@ class Detail: forecastDelegate {
             return nil
         }
         if let weatherResult = receiveInfo {
-            switch weatherResult.weather_condition {
+            switch weatherResult.weatherCondition {
             case "sunny":
                 return UIImage(named: "sunny")?.withTintColor(UIColor.red)
             case "cloudy":
@@ -152,8 +160,8 @@ class ViewController: UIViewController {
                 weatherIcon.image = iconCheck
             }
             if let receiveInfoExist = receiveInfo {
-                maxTemperature.text = "\(receiveInfoExist.max_temperature)"
-                minTemperature.text = "\(receiveInfoExist.min_temperature)"
+                maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
+                minTemperature.text = "\(receiveInfoExist.minTemperature)"
             }
         }
     }
