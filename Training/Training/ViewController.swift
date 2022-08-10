@@ -24,16 +24,16 @@ class YumemiForecast: forecastDelegate {
         do {
             errorMessage = nil
             try weather = YumemiWeather.fetchWeatherCondition(at: "tokyo")
-        } /*catch (YumemiWeatherError.invalidParameterError) {
-           errorMessage = "invalidParameterErrorが発生しました"
-           return nil
-           }*/ catch (YumemiWeatherError.unknownError) {
-               errorMessage = "unknownErrorが発生しました"
-               return nil
-           } catch {
-               errorMessage = "予期せぬエラーが発生しました"
-               return nil
-           }
+        } catch (YumemiWeatherError.invalidParameterError) {
+            errorMessage = "invalidParameterErrorが発生しました"
+            return nil
+        } catch (YumemiWeatherError.unknownError) {
+            errorMessage = "unknownErrorが発生しました"
+            return nil
+        } catch {
+            errorMessage = "予期せぬエラーが発生しました"
+            return nil
+        }
         if let weatherNotNil = weather {
             switch weatherNotNil {
             case "sunny":
