@@ -22,22 +22,23 @@ struct ReceiveInfo: Decodable {
     var date: String
 }
 
+//AlertController表示に使用する変数
+var errorMessage: String?
+//取得した情報(オブジェクト形式)を格納する変数
+var receiveInfo: ReceiveInfo? = nil
+
 //プロトコル
 protocol forecastDelegate: AnyObject {
     func fetchWeather() -> UIImage?
 }
 
-//AlertController表示に使用する変数
-var errorMessage: String? = nil
-//取得した情報(オブジェクト形式)を格納する変数
-var receiveInfo: ReceiveInfo? = nil
-
 //処理内容を記した、処理を任されるクラスその1
-class Detail: forecastDelegate {
+class YumemiForecast: forecastDelegate {
     
     func fetchWeather() -> UIImage? {
         var weather: String?
         do {
+            errorMessage = nil
             //オブジェクトからJson形式へ変換（エンコード）
             let serveInfo = ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00")
             let encoder = JSONEncoder()
@@ -85,7 +86,7 @@ class Forecast {
     //weak必須
     weak var delegate: forecastDelegate? = nil
     
-    func click() -> UIImage? {
+    func doFetchWeather() -> UIImage? {
         if let dg = self.delegate {
             return dg.fetchWeather()
         } else {
@@ -112,7 +113,6 @@ class CreateAlertController {
         alert.addAction(yesAction)
         alert.addAction(noAction)
         
-        // alert.present(alert, animated: true, completion: nil)
         return alert
     }
     
@@ -125,7 +125,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @IBOutlet var weatherIcon: UIImageView!
+    @IBOutlet var weather: UIImageView!
     @IBOutlet var maxTemperature: UILabel!
     @IBOutlet var minTemperature: UILabel!
     
@@ -133,11 +133,9 @@ class ViewController: UIViewController {
         //処理を任せるクラスのインスタンス生成
         let forecast = Forecast()
         //今回処理を任されるクラスのインスタンス生成 と紐付け
-        let detail = Detail()
-        forecast.delegate = detail
-        
-        let weatherIconBase: UIImage?
-        weatherIconBase = forecast.click()
+        let yumemiForecast = YumemiForecast()
+        forecast.delegate = yumemiForecast
+        let weatherIcon: UIImage? = forecast.doFetchWeather()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
         if let message = errorMessage  {
@@ -147,9 +145,10 @@ class ViewController: UIViewController {
             // UIAlertControllerの表示
             present(alertController, animated: true, completion: nil)
         } else {
-            //exceptionのルートを通っていなかったら天気画像と気温テキストを表示
-            if let iconCheck = weatherIconBase {
-                weatherIcon.image = iconCheck
+
+            //exceptionのルートを通っていなかったら天気画像を表示
+            if let icon = weatherIcon {
+                weather.image = icon
             }
             if let receiveInfoExist = receiveInfo {
                 maxTemperature.text = "\(receiveInfoExist.max_temperature)"
