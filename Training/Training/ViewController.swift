@@ -9,7 +9,7 @@ import UIKit
 import YumemiWeather
 
 //AlertController表示に使用する変数
-var errorMessage: String? = nil
+var errorMessage: String?
 
 //プロトコル
 protocol forecastDelegate: AnyObject {
@@ -22,6 +22,7 @@ class YumemiForecast: forecastDelegate {
     func fetchWeather() -> UIImage? {
         var weather: String?
         do {
+            errorMessage = nil
             try weather = YumemiWeather.fetchWeatherCondition(at: "tokyo")
         } /*catch (YumemiWeatherError.invalidParameterError) {
            errorMessage = "invalidParameterErrorが発生しました"
