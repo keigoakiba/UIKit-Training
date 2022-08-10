@@ -63,6 +63,16 @@
                                 <color key="textColor" name="AccentColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="blueLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80v-yY-6QK">
+                                <rect key="frame" x="97.666666666666686" y="285" width="195" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="9VS-d7-uRw"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="M7s-EU-zNu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -75,18 +85,22 @@
                             <constraint firstItem="YSp-Kv-Pj0" firstAttribute="width" secondItem="0BT-i2-Lym" secondAttribute="width" id="Cex-Ah-k0b"/>
                             <constraint firstItem="0BT-i2-Lym" firstAttribute="top" secondItem="E81-ak-YiP" secondAttribute="bottom" id="FvK-qs-9Sz"/>
                             <constraint firstItem="0BT-i2-Lym" firstAttribute="leading" secondItem="E81-ak-YiP" secondAttribute="leading" id="G7I-1E-Cvo"/>
+                            <constraint firstItem="E81-ak-YiP" firstAttribute="top" secondItem="80v-yY-6QK" secondAttribute="bottom" constant="8" symbolic="YES" id="LCE-px-YVW"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="270" id="RuL-Lh-g97"/>
                             <constraint firstItem="pLj-Cy-daM" firstAttribute="top" secondItem="YSp-Kv-Pj0" secondAttribute="bottom" constant="80" id="VLF-rn-JnA"/>
                             <constraint firstItem="qvA-bL-xA8" firstAttribute="centerX" secondItem="0BT-i2-Lym" secondAttribute="centerX" id="XwN-Ta-39L"/>
                             <constraint firstItem="pLj-Cy-daM" firstAttribute="centerX" secondItem="YSp-Kv-Pj0" secondAttribute="centerX" id="baz-i4-4Zu"/>
+                            <constraint firstItem="80v-yY-6QK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="f9K-40-vPZ"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="trailing" secondItem="YSp-Kv-Pj0" secondAttribute="trailing" id="fZP-cb-hva"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.5" id="io0-i6-Q4E"/>
+                            <constraint firstItem="E81-ak-YiP" firstAttribute="width" secondItem="80v-yY-6QK" secondAttribute="width" id="kkd-mK-LV2"/>
                             <constraint firstItem="YSp-Kv-Pj0" firstAttribute="top" secondItem="E81-ak-YiP" secondAttribute="bottom" id="mad-Vb-wVv"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="w6d-Kg-iPh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eOJ-XR-hkj"/>
                     <connections>
+                        <outlet property="date" destination="80v-yY-6QK" id="tae-21-xoC"/>
                         <outlet property="maxTemperature" destination="YSp-Kv-Pj0" id="KQ8-Zw-fyR"/>
                         <outlet property="minTemperature" destination="0BT-i2-Lym" id="M0W-oN-K8h"/>
                         <outlet property="weatherIcon" destination="E81-ak-YiP" id="QEQ-IF-VmJ"/>
@@ -94,7 +108,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-29" y="-264"/>
+            <point key="canvasLocation" x="-29.23076923076923" y="-264.45497630331755"/>
         </scene>
         <!--Previous Display View View Controller-->
         <scene sceneID="PG2-ML-vbH">

@@ -136,6 +136,7 @@ class ViewController: UIViewController {
     @IBOutlet var weatherIcon: UIImageView!
     @IBOutlet var maxTemperature: UILabel!
     @IBOutlet var minTemperature: UILabel!
+    @IBOutlet var date: UILabel!
     
     @IBAction func fetchWeather(_ sender: Any) {
         //処理を任せるクラスのインスタンス生成
