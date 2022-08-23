@@ -17,17 +17,18 @@ struct ServeInfo: Codable {
 //APIから受け取るJson文字列の器
 struct ReceiveInfo: Codable {
     var weatherCondition: String
-    var maxTemperature:Int
+    var maxTemperature: Int
     var minTemperature: Int
     var date: String
-}
+    
+    //Swift命名規則に則る変数で受け取るための列挙型
+    enum CodingKeys: String, CodingKey {
+        case weatherCondition = "weather_condition"
+        case maxTemperature = "max_temperature"
+        case minTemperature = "min_temperature"
+        case date = "date"
+    }
 
-//Swift命名規則に則る変数で受け取るための列挙型
-enum CodingKeys: String, CodingKey {
-    case weatherCondition = "weather_condition"
-    case maxTemperature
-    case minTemperature
-    case date
 }
 
 //プロトコル
@@ -46,6 +47,8 @@ class Detail: forecastDelegate {
     func fetchWeather() -> UIImage? {
         var weather: String?
         do {
+            errorMessage = nil
+            receiveInfo = nil
             //オブジェクトからJson形式へ変換（エンコード）
             let serveInfo = ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00")
             let encoder = JSONEncoder()
@@ -58,7 +61,10 @@ class Detail: forecastDelegate {
             if let weatherData = weather {
                 jsonData = weatherData.data(using: .utf8)!
             }
-            receiveInfo = try JSONDecoder().decode(ReceiveInfo.self, from: jsonData)
+            let decoder = JSONDecoder()
+            print("a")
+            decoder.dateDecodingStrategy = .iso8601
+            receiveInfo = try decoder.decode(ReceiveInfo.self, from: jsonData)
         } catch (YumemiWeatherError.invalidParameterError) {
             errorMessage = "invalidParameterErrorが発生しました"
             return nil
@@ -156,11 +162,12 @@ class ViewController: UIViewController {
             // UIAlertControllerの表示
             present(alertController, animated: true, completion: nil)
         } else {
-            //exceptionのルートを通っていなかったら天気画像と気温テキストを表示
+            //exceptionのルートを通っていなかったら時刻と天気画像と気温テキストを表示
             if let iconCheck = weatherIconBase {
                 weatherIcon.image = iconCheck
             }
             if let receiveInfoExist = receiveInfo {
+                date.text = "\(receiveInfoExist.date)"
                 maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
                 minTemperature.text = "\(receiveInfoExist.minTemperature)"
             }
