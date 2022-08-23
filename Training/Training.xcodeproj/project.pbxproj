@@ -46,7 +46,6 @@
 		737720F8288F80E60057786D = {
 			isa = PBXGroup;
 			children = (
-				734AA4D228B342E600E063B4 /* CreateAlert.swift */,
 				73772103288F80E60057786D /* Training */,
 				73772102288F80E60057786D /* Products */,
 			);
@@ -68,6 +67,7 @@
 				73772108288F80E60057786D /* ViewController.swift */,
 				7377210A288F80E60057786D /* Main.storyboard */,
 				7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */,
+				734AA4D228B342E600E063B4 /* CreateAlert.swift */,
 				7377210D288F80E70057786D /* Assets.xcassets */,
 				7377210F288F80E70057786D /* LaunchScreen.storyboard */,
 				73772112288F80E70057786D /* Info.plist */,

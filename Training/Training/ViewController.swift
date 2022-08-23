@@ -25,7 +25,7 @@ struct ReceiveInfo: Decodable {
 
 //プロトコル
 protocol forecastDelegate: AnyObject {
-    func toJsonString() -> String?
+    func toJsonString(_ serveInfo: ServeInfo) -> String?
     func fetchWeather()
     func getWeatherIcon() -> UIImage?
 }
@@ -38,11 +38,9 @@ var receiveInfo: ReceiveInfo? = nil
 //処理内容を記した、処理を任されるクラスその1
 class YumemiForecast: forecastDelegate {
     
-    var jsonData: Data?
-    
     //オブジェクトからJson形式へ変換（エンコード）
-    func toJsonString() -> String? {
-        let serveInfo = ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00")
+    func toJsonString(_ serveInfo: ServeInfo) -> String? {
+        var jsonData: Data?
         let encoder = JSONEncoder()
         do {
             jsonData = try encoder.encode(serveInfo)
@@ -66,12 +64,13 @@ class YumemiForecast: forecastDelegate {
             errorMessage = nil
             receiveInfo = nil
             //オブジェクトからJson形式へ変換（エンコード）
-            let jsonString = toJsonString()
+            let jsonString = toJsonString(ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00"))
             if let jsonString = jsonString {
                 //Json文字列を引数にAPI呼び出し、天気取得
                 try weather = YumemiWeather.fetchWeather(jsonString)
             }
             //受け取ったJson文字列をオブジェクトに変換（デコード）
+            var jsonData: Data?
             if let weatherData = weather {
                 jsonData = weatherData.data(using: .utf8)!
             }
