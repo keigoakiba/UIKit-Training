@@ -7,6 +7,7 @@
 
 import UIKit
 import YumemiWeather
+import Foundation
 
 //APIに渡すJson文字列の器
 struct ServeInfo: Codable {
@@ -19,7 +20,7 @@ struct ReceiveInfo: Codable {
     var weatherCondition: String
     var maxTemperature: Int
     var minTemperature: Int
-    var date: String
+    var date: Date
     
     //Swift命名規則に則る変数で受け取るための列挙型
     enum CodingKeys: String, CodingKey {
@@ -33,49 +34,70 @@ struct ReceiveInfo: Codable {
 
 //プロトコル
 protocol forecastDelegate: AnyObject {
-    func fetchWeather() -> UIImage?
+    func toJsonString(_ serveInfo: ServeInfo) -> String?
+    func fetchWeather()
+    func getWeatherIcon() -> UIImage?
 }
 
 //AlertController表示に使用する変数
-var errorMessage: String? = nil
+var errorMessage: String?
 //取得した情報(オブジェクト形式)を格納する変数
 var receiveInfo: ReceiveInfo? = nil
 
 //処理内容を記した、処理を任されるクラスその1
-class Detail: forecastDelegate {
+class YumemiForecast: forecastDelegate {
     
-    func fetchWeather() -> UIImage? {
-        var weather: String?
+    //オブジェクトからJson形式へ変換（エンコード）
+    func toJsonString(_ serveInfo: ServeInfo) -> String? {
+        var jsonData: Data?
+        let encoder = JSONEncoder()
         do {
-            errorMessage = nil
-            receiveInfo = nil
-            //オブジェクトからJson形式へ変換（エンコード）
-            let serveInfo = ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00")
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            var jsonData = try encoder.encode(serveInfo)
-            let jsonString = String(data: jsonData, encoding: .utf8)!
-            //Json文字列を引数にAPI呼び出し、天気取得
-            try weather = YumemiWeather.fetchWeather(jsonString)
-            //受け取ったJson文字列をオブジェクトに変換（デコード）
-            if let weatherData = weather {
-                jsonData = weatherData.data(using: .utf8)!
-            }
-            let decoder = JSONDecoder()
-            print("a")
-            decoder.dateDecodingStrategy = .iso8601
-            receiveInfo = try decoder.decode(ReceiveInfo.self, from: jsonData)
-        } catch (YumemiWeatherError.invalidParameterError) {
-            errorMessage = "invalidParameterErrorが発生しました"
-            return nil
-        } catch (YumemiWeatherError.unknownError) {
-            errorMessage = "unknownErrorが発生しました"
-            return nil
+            jsonData = try encoder.encode(serveInfo)
         } catch {
             errorMessage = "予期せぬエラーが発生しました"
             print(error)
             return nil
         }
+        if let jsonData = jsonData {
+            let jsonString = String(data: jsonData, encoding: .utf8)!
+            return jsonString
+        } else {
+            return nil
+        }
+    }
+    
+    //API取得、デコード
+    func fetchWeather() {
+        var weather: String?
+        do {
+            errorMessage = nil
+            receiveInfo = nil
+            //オブジェクトからJson形式へ変換（エンコード）
+            let jsonString = toJsonString(ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00"))
+            if let jsonString = jsonString {
+                //Json文字列を引数にAPI呼び出し、天気取得
+                try weather = YumemiWeather.fetchWeather(jsonString)
+            }
+            //受け取ったJson文字列をオブジェクトに変換（デコード）
+            guard let weatherData = weather else {
+                return
+            }
+            let jsonData = weatherData.data(using: .utf8)!
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            receiveInfo = try decoder.decode(ReceiveInfo.self, from: jsonData)
+        } catch (YumemiWeatherError.invalidParameterError) {
+            errorMessage = "invalidParameterErrorが発生しました"
+        } catch (YumemiWeatherError.unknownError) {
+            errorMessage = "unknownErrorが発生しました"
+        } catch {
+            errorMessage = "予期せぬエラーが発生しました"
+            print(error)
+        }
+    }
+    
+    //画像を取得
+    func getWeatherIcon() -> UIImage? {
         if let weatherResult = receiveInfo {
             switch weatherResult.weatherCondition {
             case "sunny":
@@ -99,35 +121,12 @@ class Forecast {
     //weak必須
     weak var delegate: forecastDelegate? = nil
     
-    func click() -> UIImage? {
+    func doFetchWeather()  {
         if let dg = self.delegate {
             return dg.fetchWeather()
         } else {
-            return nil
+            print("delegate実行不可")
         }
-    }
-    
-}
-
-//UIArertControllerを生成するクラス
-class CreateAlertController {
-    
-    func create (_ message: String) -> UIAlertController {
-        // UIAlertControllerの生成
-        let alert = UIAlertController(title: message, message: "再試行してください", preferredStyle: .alert)
-        // アクションの生成
-        let yesAction = UIAlertAction(title: "了解", style: .default) { action in
-            //追加処理なし
-        }
-        let noAction = UIAlertAction(title: "納得できません", style: .destructive) { action in
-            //追加処理なし
-        }
-        // アクションの追加
-        alert.addAction(yesAction)
-        alert.addAction(noAction)
-        
-        // alert.present(alert, animated: true, completion: nil)
-        return alert
     }
     
 }
@@ -139,20 +138,19 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @IBOutlet var weatherIcon: UIImageView!
+    @IBOutlet var weather: UIImageView!
     @IBOutlet var maxTemperature: UILabel!
     @IBOutlet var minTemperature: UILabel!
     @IBOutlet var date: UILabel!
     
     @IBAction func fetchWeather(_ sender: Any) {
+        var weatherIcon: UIImage? = nil
         //処理を任せるクラスのインスタンス生成
         let forecast = Forecast()
         //今回処理を任されるクラスのインスタンス生成 と紐付け
-        let detail = Detail()
-        forecast.delegate = detail
-        
-        let weatherIconBase: UIImage?
-        weatherIconBase = forecast.click()
+        let yumemiForecast = YumemiForecast()
+        forecast.delegate = yumemiForecast
+        forecast.doFetchWeather()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
         if let message = errorMessage  {
@@ -162,12 +160,15 @@ class ViewController: UIViewController {
             // UIAlertControllerの表示
             present(alertController, animated: true, completion: nil)
         } else {
-            //exceptionのルートを通っていなかったら時刻と天気画像と気温テキストを表示
-            if let iconCheck = weatherIconBase {
-                weatherIcon.image = iconCheck
-            }
+            //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
             if let receiveInfoExist = receiveInfo {
-                date.text = "\(receiveInfoExist.date)"
+                weatherIcon = yumemiForecast.getWeatherIcon()
+                if let icon = weatherIcon {
+                    weather.image = icon
+                }
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
                 maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
                 minTemperature.text = "\(receiveInfoExist.minTemperature)"
             }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		73248AF12891203500D53AD1 /* YumemiWeather in Frameworks */ = {isa = PBXBuildFile; productRef = 73248AF02891203500D53AD1 /* YumemiWeather */; };
 		7339727728939872005447F3 /* PreviousDisplayViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */; };
+		734AA4D328B342E600E063B4 /* CreateAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734AA4D228B342E600E063B4 /* CreateAlert.swift */; };
 		7355B9082899138800DF50B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772108288F80E60057786D /* ViewController.swift */; };
 		73772105288F80E60057786D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772104288F80E60057786D /* AppDelegate.swift */; };
 		73772107288F80E60057786D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772106288F80E60057786D /* SceneDelegate.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousDisplayViewViewController.swift; sourceTree = "<group>"; };
+		734AA4D228B342E600E063B4 /* CreateAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAlert.swift; sourceTree = "<group>"; };
 		73772101288F80E60057786D /* Training.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Training.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73772104288F80E60057786D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		73772106288F80E60057786D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				73772108288F80E60057786D /* ViewController.swift */,
 				7377210A288F80E60057786D /* Main.storyboard */,
 				7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */,
+				734AA4D228B342E600E063B4 /* CreateAlert.swift */,
 				7377210D288F80E70057786D /* Assets.xcassets */,
 				7377210F288F80E70057786D /* LaunchScreen.storyboard */,
 				73772112288F80E70057786D /* Info.plist */,
@@ -149,6 +152,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				734AA4D328B342E600E063B4 /* CreateAlert.swift in Sources */,
 				73772105288F80E60057786D /* AppDelegate.swift in Sources */,
 				73772107288F80E60057786D /* SceneDelegate.swift in Sources */,
 				7355B9082899138800DF50B1 /* ViewController.swift in Sources */,

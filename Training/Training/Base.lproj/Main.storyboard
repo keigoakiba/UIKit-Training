@@ -64,7 +64,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="blueLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80v-yY-6QK">
-                                <rect key="frame" x="97.666666666666686" y="285" width="195" height="21"/>
+                                <rect key="frame" x="73" y="257.33333333333331" width="244" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="9VS-d7-uRw"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="M7s-EU-zNu"/>
@@ -85,15 +85,15 @@
                             <constraint firstItem="YSp-Kv-Pj0" firstAttribute="width" secondItem="0BT-i2-Lym" secondAttribute="width" id="Cex-Ah-k0b"/>
                             <constraint firstItem="0BT-i2-Lym" firstAttribute="top" secondItem="E81-ak-YiP" secondAttribute="bottom" id="FvK-qs-9Sz"/>
                             <constraint firstItem="0BT-i2-Lym" firstAttribute="leading" secondItem="E81-ak-YiP" secondAttribute="leading" id="G7I-1E-Cvo"/>
-                            <constraint firstItem="E81-ak-YiP" firstAttribute="top" secondItem="80v-yY-6QK" secondAttribute="bottom" constant="8" symbolic="YES" id="LCE-px-YVW"/>
+                            <constraint firstItem="E81-ak-YiP" firstAttribute="top" secondItem="80v-yY-6QK" secondAttribute="bottom" multiplier="1.1" constant="8" symbolic="YES" id="LCE-px-YVW"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="270" id="RuL-Lh-g97"/>
                             <constraint firstItem="pLj-Cy-daM" firstAttribute="top" secondItem="YSp-Kv-Pj0" secondAttribute="bottom" constant="80" id="VLF-rn-JnA"/>
                             <constraint firstItem="qvA-bL-xA8" firstAttribute="centerX" secondItem="0BT-i2-Lym" secondAttribute="centerX" id="XwN-Ta-39L"/>
+                            <constraint firstItem="E81-ak-YiP" firstAttribute="width" secondItem="80v-yY-6QK" secondAttribute="width" multiplier="0.8" id="YEA-OD-H1N"/>
                             <constraint firstItem="pLj-Cy-daM" firstAttribute="centerX" secondItem="YSp-Kv-Pj0" secondAttribute="centerX" id="baz-i4-4Zu"/>
                             <constraint firstItem="80v-yY-6QK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="f9K-40-vPZ"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="trailing" secondItem="YSp-Kv-Pj0" secondAttribute="trailing" id="fZP-cb-hva"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.5" id="io0-i6-Q4E"/>
-                            <constraint firstItem="E81-ak-YiP" firstAttribute="width" secondItem="80v-yY-6QK" secondAttribute="width" id="kkd-mK-LV2"/>
                             <constraint firstItem="YSp-Kv-Pj0" firstAttribute="top" secondItem="E81-ak-YiP" secondAttribute="bottom" id="mad-Vb-wVv"/>
                             <constraint firstItem="E81-ak-YiP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="w6d-Kg-iPh"/>
                         </constraints>
@@ -103,7 +103,7 @@
                         <outlet property="date" destination="80v-yY-6QK" id="tae-21-xoC"/>
                         <outlet property="maxTemperature" destination="YSp-Kv-Pj0" id="KQ8-Zw-fyR"/>
                         <outlet property="minTemperature" destination="0BT-i2-Lym" id="M0W-oN-K8h"/>
-                        <outlet property="weatherIcon" destination="E81-ak-YiP" id="QEQ-IF-VmJ"/>
+                        <outlet property="weather" destination="E81-ak-YiP" id="w8P-vs-ZeT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -117,23 +117,8 @@
                     <view key="view" contentMode="scaleToFill" id="vDz-Qc-Zb4">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGd-bm-7HM">
-                                <rect key="frame" x="146" y="388" width="98" height="68"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="68" id="q9Q-YQ-lIF"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="画面遷移"/>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="B7X-0K-tGb"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="vGd-bm-7HM" firstAttribute="centerX" secondItem="vDz-Qc-Zb4" secondAttribute="centerX" id="1yz-Z0-byU"/>
-                            <constraint firstItem="vGd-bm-7HM" firstAttribute="centerY" secondItem="vDz-Qc-Zb4" secondAttribute="centerY" id="lRa-Eh-1oc"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fDf-fJ-oQU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
