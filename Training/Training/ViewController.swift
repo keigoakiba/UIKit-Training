@@ -70,13 +70,11 @@ class YumemiForecast: forecastDelegate {
                 try weather = YumemiWeather.fetchWeather(jsonString)
             }
             //受け取ったJson文字列をオブジェクトに変換（デコード）
-            var jsonData: Data?
-            if let weatherData = weather {
-                jsonData = weatherData.data(using: .utf8)!
+            guard let weatherData = weather else {
+                return
             }
-            if let jsonData = jsonData {
-                receiveInfo = try JSONDecoder().decode(ReceiveInfo.self, from: jsonData)
-            }
+            let jsonData = weatherData.data(using: .utf8)!
+            receiveInfo = try JSONDecoder().decode(ReceiveInfo.self, from: jsonData)
         } catch (YumemiWeatherError.invalidParameterError) {
             errorMessage = "invalidParameterErrorが発生しました"
         } catch (YumemiWeatherError.unknownError) {
@@ -152,10 +150,10 @@ class ViewController: UIViewController {
         } else {
             //exceptionのルートを通っていなかったら天気画像等を表示
             if let receiveInfoExist = receiveInfo {
-            weatherIcon = yumemiForecast.getWeatherIcon()
-            if let icon = weatherIcon {
-                weather.image = icon
-            }
+                weatherIcon = yumemiForecast.getWeatherIcon()
+                if let icon = weatherIcon {
+                    weather.image = icon
+                }
                 maxTemperature.text = "\(receiveInfoExist.max_temperature)"
                 minTemperature.text = "\(receiveInfoExist.min_temperature)"
             }
