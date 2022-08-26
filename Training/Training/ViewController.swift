@@ -136,6 +136,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self,
+                                                selector: #selector(foreground(notification:)),
+                                                name: UIApplication.willEnterForegroundNotification,
+                                                object: nil)
     }
     
     @IBOutlet var weather: UIImageView!
@@ -143,7 +147,8 @@ class ViewController: UIViewController {
     @IBOutlet var minTemperature: UILabel!
     @IBOutlet var date: UILabel!
     
-    @IBAction func fetchWeather(_ sender: Any) {
+    //バックグラウンドからフォアグラウンドに戻った際に実行される処理
+    @objc func foreground(notification: Notification) {
         var weatherIcon: UIImage? = nil
         //処理を任せるクラスのインスタンス生成
         let forecast = Forecast()
@@ -175,6 +180,40 @@ class ViewController: UIViewController {
         }
     }
     
+    /* 今後の課題で使用する可能性があるため残している
+    @IBAction func fetchWeather(_ sender: Any) {
+        var weatherIcon: UIImage? = nil
+        //処理を任せるクラスのインスタンス生成
+        let forecast = Forecast()
+        //今回処理を任されるクラスのインスタンス生成 と紐付け
+        let yumemiForecast = YumemiForecast()
+        forecast.delegate = yumemiForecast
+        forecast.doFetchWeather()
+        
+        //exceptionルートを通っていたらUIArertControllerでエラー表示
+        if let message = errorMessage  {
+            //UIAlertController生成クラスの呼び出し
+            let createAlertController = CreateAlertController()
+            let alertController = createAlertController.create(message)
+            // UIAlertControllerの表示
+            present(alertController, animated: true, completion: nil)
+        } else {
+            //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
+            if let receiveInfoExist = receiveInfo {
+                weatherIcon = yumemiForecast.getWeatherIcon()
+                if let icon = weatherIcon {
+                    weather.image = icon
+                }
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
+                maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
+                minTemperature.text = "\(receiveInfoExist.minTemperature)"
+            }
+        }
+    }
+    */
+     
     //天気予報画面を閉じる
     @IBAction func closeViewCon() {
         self.dismiss(animated: true, completion: nil)
