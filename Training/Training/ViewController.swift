@@ -39,13 +39,14 @@ protocol forecastDelegate: AnyObject {
     func getWeatherIcon() -> UIImage?
 }
 
-//AlertController表示に使用する変数
-var errorMessage: String?
-//取得した情報(オブジェクト形式)を格納する変数
-var receiveInfo: ReceiveInfo? = nil
 
 //処理内容を記した、処理を任されるクラスその1
 class YumemiForecast: forecastDelegate {
+    
+    //AlertController表示に使用する変数
+    var errorMessage: String?
+    //取得した情報(オブジェクト形式)を格納する変数
+    var receiveInfo: ReceiveInfo? = nil
     
     //オブジェクトからJson形式へ変換（エンコード）
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
@@ -153,7 +154,7 @@ class ViewController: UIViewController {
         forecast.doFetchWeather()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
-        if let message = errorMessage  {
+        if let message = YumemiForecast().errorMessage  {
             //UIAlertController生成クラスの呼び出し
             let createAlertController = CreateAlertController()
             let alertController = createAlertController.create(message)
@@ -161,7 +162,7 @@ class ViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
         } else {
             //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
-            if let receiveInfoExist = receiveInfo {
+            if let receiveInfoExist = YumemiForecast().receiveInfo {
                 weatherIcon = yumemiForecast.getWeatherIcon()
                 if let icon = weatherIcon {
                     weather.image = icon
