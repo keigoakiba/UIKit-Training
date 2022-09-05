@@ -34,6 +34,10 @@ struct ReceiveInfo: Codable {
 
 //プロトコル
 protocol forecastDelegate: AnyObject {
+    //AlertController表示に使用する変数
+    var errorMessage: String? { get }
+    //取得した情報(オブジェクト形式)を格納する変数
+    var receiveInfo: ReceiveInfo? { get }
     func toJsonString(_ serveInfo: ServeInfo) -> String?
     func fetchWeather()
     func getWeatherIcon() -> UIImage?
@@ -43,10 +47,8 @@ protocol forecastDelegate: AnyObject {
 //処理内容を記した、処理を任されるクラスその1
 class YumemiForecast: forecastDelegate {
     
-    //AlertController表示に使用する変数
     var errorMessage: String?
-    //取得した情報(オブジェクト形式)を格納する変数
-    var receiveInfo: ReceiveInfo? = nil
+    var receiveInfo: ReceiveInfo?
     
     //オブジェクトからJson形式へ変換（エンコード）
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
@@ -74,7 +76,7 @@ class YumemiForecast: forecastDelegate {
             errorMessage = nil
             receiveInfo = nil
             //オブジェクトからJson形式へ変換（エンコード）
-            let jsonString = toJsonString(ServeInfo(area: "tokyo", date: "2020-04-01T12:00:00+09:00"))
+            let jsonString = toJsonString(ServeInfo(area: "tokyo", date: "2020-04-04T12:00:00+09:00"))
             if let jsonString = jsonString {
                 //Json文字列を引数にAPI呼び出し、天気取得
                 try weather = YumemiWeather.fetchWeather(jsonString)
@@ -120,13 +122,45 @@ class YumemiForecast: forecastDelegate {
 //処理を任せるクラス
 class Forecast {
     //weak必須
-    weak var delegate: forecastDelegate? = nil
+    private weak var delegate: forecastDelegate? = nil
+    
+    init (_ selectedClass: forecastDelegate) {
+        let classIns = selectedClass
+        self.delegate = classIns
+    }
     
     func doFetchWeather()  {
         if let dg = self.delegate {
             return dg.fetchWeather()
         } else {
             print("delegate実行不可")
+        }
+    }
+    
+    func doGetWeatherIcon() -> UIImage? {
+        if let dg = self.delegate {
+            return dg.getWeatherIcon()
+        } else {
+            print("delegate実行不可")
+            return nil
+        }
+    }
+    
+    //errorMessageを返すメソッド
+    func returnErrorMessage() -> String? {
+        if let errorMessage = delegate?.errorMessage {
+            return errorMessage
+        } else {
+            return nil
+        }
+    }
+    
+    //receiveIndoを返すメソッド
+    func returnReceiveInfo() -> ReceiveInfo? {
+        if let receiveInfo = delegate?.receiveInfo {
+            return receiveInfo
+        } else {
+            return nil
         }
     }
     
@@ -146,15 +180,14 @@ class ViewController: UIViewController {
     
     @IBAction func fetchWeather(_ sender: Any) {
         var weatherIcon: UIImage? = nil
-        //処理を任せるクラスのインスタンス生成
-        let forecast = Forecast()
-        //今回処理を任されるクラスのインスタンス生成 と紐付け
-        let yumemiForecast = YumemiForecast()
-        forecast.delegate = yumemiForecast
+        //処理を任せるクラスのインスタンス生成と今回処理を任されるクラスの紐付け
+        let forecast = Forecast(YumemiForecast())
         forecast.doFetchWeather()
+        let message: String? = forecast.returnErrorMessage()
+        let info: ReceiveInfo? = forecast.returnReceiveInfo()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
-        if let message = YumemiForecast().errorMessage  {
+        if let message = message  {
             //UIAlertController生成クラスの呼び出し
             let createAlertController = CreateAlertController()
             let alertController = createAlertController.create(message)
@@ -162,8 +195,8 @@ class ViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
         } else {
             //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
-            if let receiveInfoExist = YumemiForecast().receiveInfo {
-                weatherIcon = yumemiForecast.getWeatherIcon()
+            if let receiveInfoExist = info {
+                weatherIcon = forecast.doGetWeatherIcon()
                 if let icon = weatherIcon {
                     weather.image = icon
                 }
