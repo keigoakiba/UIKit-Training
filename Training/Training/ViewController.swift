@@ -29,11 +29,11 @@ struct ReceiveInfo: Codable {
         case minTemperature = "min_temperature"
         case date = "date"
     }
-
+    
 }
 
 //プロトコル
-protocol forecastDelegate: AnyObject {
+protocol ForecastProtocol: AnyObject {
     //AlertController表示に使用する変数
     var errorMessage: String? { get }
     //取得した情報(オブジェクト形式)を格納する変数
@@ -45,7 +45,7 @@ protocol forecastDelegate: AnyObject {
 
 
 //処理内容を記した、処理を任されるクラスその1
-class YumemiForecast: forecastDelegate {
+class YumemiForecast: ForecastProtocol {
     
     var errorMessage: String?
     var receiveInfo: ReceiveInfo?
@@ -76,7 +76,10 @@ class YumemiForecast: forecastDelegate {
             errorMessage = nil
             receiveInfo = nil
             //オブジェクトからJson形式へ変換（エンコード）
-            let jsonString = toJsonString(ServeInfo(area: "tokyo", date: "2020-04-04T12:00:00+09:00"))
+            //↓ DateFormatter() かつ dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ" でも対応可能
+            let dateFormatter = ISO8601DateFormatter()
+            let dtString: String = dateFormatter.string(from: Date())
+            let jsonString = toJsonString(ServeInfo(area: "tokyo", date: dtString))
             if let jsonString = jsonString {
                 //Json文字列を引数にAPI呼び出し、天気取得
                 try weather = YumemiWeather.fetchWeather(jsonString)
@@ -121,16 +124,14 @@ class YumemiForecast: forecastDelegate {
 
 //処理を任せるクラス
 class Forecast {
-    //weak必須
-    private weak var delegate: forecastDelegate? = nil
+    private var impl: ForecastProtocol? = nil
     
-    init (_ selectedClass: forecastDelegate) {
-        let classIns = selectedClass
-        self.delegate = classIns
+    init (_ selectedClass: ForecastProtocol) {
+        self.impl = selectedClass
     }
     
     func doFetchWeather()  {
-        if let dg = self.delegate {
+        if let dg = self.impl {
             return dg.fetchWeather()
         } else {
             print("delegate実行不可")
@@ -138,7 +139,7 @@ class Forecast {
     }
     
     func doGetWeatherIcon() -> UIImage? {
-        if let dg = self.delegate {
+        if let dg = self.impl {
             return dg.getWeatherIcon()
         } else {
             print("delegate実行不可")
@@ -147,21 +148,13 @@ class Forecast {
     }
     
     //errorMessageを返すメソッド
-    func returnErrorMessage() -> String? {
-        if let errorMessage = delegate?.errorMessage {
-            return errorMessage
-        } else {
-            return nil
-        }
+    func errorMessage() -> String? {
+        return impl?.errorMessage
     }
     
     //receiveIndoを返すメソッド
-    func returnReceiveInfo() -> ReceiveInfo? {
-        if let receiveInfo = delegate?.receiveInfo {
-            return receiveInfo
-        } else {
-            return nil
-        }
+    func receiveInfo() -> ReceiveInfo? {
+        return impl?.receiveInfo
     }
     
 }
@@ -183,29 +176,27 @@ class ViewController: UIViewController {
         //処理を任せるクラスのインスタンス生成と今回処理を任されるクラスの紐付け
         let forecast = Forecast(YumemiForecast())
         forecast.doFetchWeather()
-        let message: String? = forecast.returnErrorMessage()
-        let info: ReceiveInfo? = forecast.returnReceiveInfo()
         
         //exceptionルートを通っていたらUIArertControllerでエラー表示
-        if let message = message  {
+        if let message = forecast.errorMessage()  {
             //UIAlertController生成クラスの呼び出し
             let createAlertController = CreateAlertController()
             let alertController = createAlertController.create(message)
             // UIAlertControllerの表示
             present(alertController, animated: true, completion: nil)
-        } else {
-            //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
-            if let receiveInfoExist = info {
-                weatherIcon = forecast.doGetWeatherIcon()
-                if let icon = weatherIcon {
-                    weather.image = icon
-                }
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
-                maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
-                minTemperature.text = "\(receiveInfoExist.minTemperature)"
+            return
+        }
+        //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
+        if let receiveInfoExist = forecast.receiveInfo() {
+            weatherIcon = forecast.doGetWeatherIcon()
+            if let icon = weatherIcon {
+                weather.image = icon
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
+            maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
+            minTemperature.text = "\(receiveInfoExist.minTemperature)"
         }
     }
     
