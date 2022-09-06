@@ -165,9 +165,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(handleWillEnterForeground(notification:)),
-                                                name: UIApplication.willEnterForegroundNotification,
-                                                object: nil)
+                                               selector: #selector(handleWillEnterForeground(notification:)),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
     }
     
     @IBOutlet var weather: UIImageView!
