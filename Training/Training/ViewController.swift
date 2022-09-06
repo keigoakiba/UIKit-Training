@@ -159,15 +159,13 @@ class Forecast {
     
 }
 
-
-
 //実際に処理が動くクラス(画面)
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(foreground(notification:)),
+                                                selector: #selector(handleWillEnterForeground(notification:)),
                                                 name: UIApplication.willEnterForegroundNotification,
                                                 object: nil)
     }
@@ -177,8 +175,7 @@ class ViewController: UIViewController {
     @IBOutlet var minTemperature: UILabel!
     @IBOutlet var date: UILabel!
     
-    //メイン処理のベース
-    func information() {
+    func updateForecast() {
         var weatherIcon: UIImage? = nil
         //処理を任せるクラスのインスタンス生成と今回処理を任されるクラスの紐付け
         let forecast = Forecast(YumemiForecast())
@@ -208,17 +205,17 @@ class ViewController: UIViewController {
     }
     
     //バックグラウンドからフォアグラウンドに戻った際に実行される処理
-    @objc func foreground(notification: Notification) {
-        information()
+    @objc func handleWillEnterForeground(notification: Notification) {
+        updateForecast()
     }
     
     //Reloadボタンが押下された際に実行される処理
-    @IBAction func fetchWeather(_ sender: Any) {
-        information()
+    @IBAction func reloadButtonTapped(_ sender: Any) {
+        updateForecast()
     }
     
     //天気予報画面を閉じる
-    @IBAction func closeViewCon() {
+    @IBAction func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
     
