@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		73248AF12891203500D53AD1 /* YumemiWeather in Frameworks */ = {isa = PBXBuildFile; productRef = 73248AF02891203500D53AD1 /* YumemiWeather */; };
-		7328CD5428CEF09F00ECC192 /* forecastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7328CD5328CEF09F00ECC192 /* forecastModel.swift */; };
+		7328CD5528D064F100ECC192 /* forecastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7328CD5328CEF09F00ECC192 /* forecastModel.swift */; };
 		7339727728939872005447F3 /* PreviousDisplayViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */; };
-		733A423528C8316D00418086 /* TrainingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A423428C8316D00418086 /* TrainingUITests.swift */; };
-		733A423728C8316D00418086 /* TrainingUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A423628C8316D00418086 /* TrainingUITestsLaunchTests.swift */; };
 		733A424228C9A33500418086 /* TrainingUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733A424128C9A33500418086 /* TrainingUnitTests.swift */; };
 		734AA4D328B342E600E063B4 /* CreateAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734AA4D228B342E600E063B4 /* CreateAlert.swift */; };
 		7355B9082899138800DF50B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73772108288F80E60057786D /* ViewController.swift */; };
@@ -30,22 +28,12 @@
 			remoteGlobalIDString = 73772100288F80E60057786D;
 			remoteInfo = Training;
 		};
-		733A423828C8316D00418086 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 737720F9288F80E60057786D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 73772100288F80E60057786D;
-			remoteInfo = Training;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		7328CD5328CEF09F00ECC192 /* forecastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = forecastModel.swift; sourceTree = "<group>"; };
 		7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousDisplayViewViewController.swift; sourceTree = "<group>"; };
 		733A422528C8314C00418086 /* TrainingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		733A423228C8316D00418086 /* TrainingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		733A423428C8316D00418086 /* TrainingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingUITests.swift; sourceTree = "<group>"; };
-		733A423628C8316D00418086 /* TrainingUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		733A424128C9A33500418086 /* TrainingUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingUnitTests.swift; sourceTree = "<group>"; };
 		734AA4D228B342E600E063B4 /* CreateAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAlert.swift; sourceTree = "<group>"; };
 		73772101288F80E60057786D /* Training.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Training.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,13 +48,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		733A422228C8314C00418086 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		733A422F28C8316D00418086 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -88,17 +69,9 @@
 			isa = PBXGroup;
 			children = (
 				733A424128C9A33500418086 /* TrainingUnitTests.swift */,
+				7328CD5328CEF09F00ECC192 /* forecastModel.swift */,
 			);
 			path = TrainingTests;
-			sourceTree = "<group>";
-		};
-		733A423328C8316D00418086 /* TrainingUITests */ = {
-			isa = PBXGroup;
-			children = (
-				733A423428C8316D00418086 /* TrainingUITests.swift */,
-				733A423628C8316D00418086 /* TrainingUITestsLaunchTests.swift */,
-			);
-			path = TrainingUITests;
 			sourceTree = "<group>";
 		};
 		737720F8288F80E60057786D = {
@@ -106,7 +79,6 @@
 			children = (
 				73772103288F80E60057786D /* Training */,
 				733A422628C8314C00418086 /* TrainingTests */,
-				733A423328C8316D00418086 /* TrainingUITests */,
 				73772102288F80E60057786D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -116,7 +88,6 @@
 			children = (
 				73772101288F80E60057786D /* Training.app */,
 				733A422528C8314C00418086 /* TrainingTests.xctest */,
-				733A423228C8316D00418086 /* TrainingUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +98,6 @@
 				73772104288F80E60057786D /* AppDelegate.swift */,
 				73772106288F80E60057786D /* SceneDelegate.swift */,
 				73772108288F80E60057786D /* ViewController.swift */,
-				7328CD5328CEF09F00ECC192 /* forecastModel.swift */,
 				7377210A288F80E60057786D /* Main.storyboard */,
 				7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */,
 				734AA4D228B342E600E063B4 /* CreateAlert.swift */,
@@ -158,24 +128,6 @@
 			productName = TrainingTests;
 			productReference = 733A422528C8314C00418086 /* TrainingTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		733A423128C8316D00418086 /* TrainingUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 733A423A28C8316D00418086 /* Build configuration list for PBXNativeTarget "TrainingUITests" */;
-			buildPhases = (
-				733A422E28C8316D00418086 /* Sources */,
-				733A422F28C8316D00418086 /* Frameworks */,
-				733A423028C8316D00418086 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				733A423928C8316D00418086 /* PBXTargetDependency */,
-			);
-			name = TrainingUITests;
-			productName = TrainingUITests;
-			productReference = 733A423228C8316D00418086 /* TrainingUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		73772100288F80E60057786D /* Training */ = {
 			isa = PBXNativeTarget;
@@ -211,10 +163,6 @@
 						CreatedOnToolsVersion = 13.4.1;
 						TestTargetID = 73772100288F80E60057786D;
 					};
-					733A423128C8316D00418086 = {
-						CreatedOnToolsVersion = 13.4.1;
-						TestTargetID = 73772100288F80E60057786D;
-					};
 					73772100288F80E60057786D = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
@@ -238,20 +186,12 @@
 			targets = (
 				73772100288F80E60057786D /* Training */,
 				733A422428C8314C00418086 /* TrainingTests */,
-				733A423128C8316D00418086 /* TrainingUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		733A422328C8314C00418086 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		733A423028C8316D00418086 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -275,16 +215,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7328CD5528D064F100ECC192 /* forecastModel.swift in Sources */,
 				733A424228C9A33500418086 /* TrainingUnitTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		733A422E28C8316D00418086 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				733A423728C8316D00418086 /* TrainingUITestsLaunchTests.swift in Sources */,
-				733A423528C8316D00418086 /* TrainingUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,7 +229,6 @@
 				73772107288F80E60057786D /* SceneDelegate.swift in Sources */,
 				7355B9082899138800DF50B1 /* ViewController.swift in Sources */,
 				7339727728939872005447F3 /* PreviousDisplayViewViewController.swift in Sources */,
-				7328CD5428CEF09F00ECC192 /* forecastModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,11 +239,6 @@
 			isa = PBXTargetDependency;
 			target = 73772100288F80E60057786D /* Training */;
 			targetProxy = 733A422928C8314C00418086 /* PBXContainerItemProxy */;
-		};
-		733A423928C8316D00418086 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 73772100288F80E60057786D /* Training */;
-			targetProxy = 733A423828C8316D00418086 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -367,38 +293,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Training.app/Training";
-			};
-			name = Release;
-		};
-		733A423B28C8316D00418086 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.akiba.TrainingUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Training;
-			};
-			name = Debug;
-		};
-		733A423C28C8316D00418086 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.akiba.TrainingUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Training;
 			};
 			name = Release;
 		};
@@ -580,15 +474,6 @@
 			buildConfigurations = (
 				733A422B28C8314C00418086 /* Debug */,
 				733A422C28C8314C00418086 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		733A423A28C8316D00418086 /* Build configuration list for PBXNativeTarget "TrainingUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				733A423B28C8316D00418086 /* Debug */,
-				733A423C28C8316D00418086 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

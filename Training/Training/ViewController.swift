@@ -61,8 +61,8 @@ class YumemiForecast: ForecastProtocol {
             print(error)
             return nil
         }
-        if let jsonData = jsonData {
-            let jsonString = String(data: jsonData, encoding: .utf8)!
+        if let jsonDataExist = jsonData {
+            let jsonString = String(data: jsonDataExist, encoding: .utf8)!
             return jsonString
         } else {
             return nil
@@ -80,9 +80,9 @@ class YumemiForecast: ForecastProtocol {
             let dateFormatter = ISO8601DateFormatter()
             let dtString: String = dateFormatter.string(from: Date())
             let jsonString = toJsonString(ServeInfo(area: "tokyo", date: dtString))
-            if let jsonString = jsonString {
+            if let jsonStringExist = jsonString {
                 //Json文字列を引数にAPI呼び出し、天気取得
-                try weather = YumemiWeather.fetchWeather(jsonString)
+                try weather = YumemiWeather.fetchWeather(jsonStringExist)
             }
             //受け取ったJson文字列をオブジェクトに変換（デコード）
             guard let weatherData = weather else {
@@ -158,17 +158,17 @@ class ViewController: UIViewController {
             // UIAlertControllerの表示
             present(alertController, animated: true, completion: nil)
             return
-        } else {
-            if let receiveInfo = receiveInfo {
-                if let weatherIcon = weatherIcon {
-                    weather.image = weatherIcon
-                }
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                date.text = "\(dateFormatter.string(from: receiveInfo.date))"
-                maxTemperature.text = "\(receiveInfo.maxTemperature)"
-                minTemperature.text = "\(receiveInfo.minTemperature)"
+        }
+        //通っていなかったら取得情報のラベル等への埋め込み
+        if let receiveInfoExist = receiveInfo {
+            if let weatherIcon = weatherIcon {
+                weather.image = weatherIcon
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
+            maxTemperature.text = "\(receiveInfoExist.maxTemperature)"
+            minTemperature.text = "\(receiveInfoExist.minTemperature)"
         }
     }
     
