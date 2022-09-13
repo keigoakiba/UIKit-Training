@@ -3,4 +3,22 @@
    uuid = "1AA7E740-CCE4-447A-9798-78CD6D511F1B"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E268FFD4-92A0-4311-88E7-BD6C6B7C62A2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrainingTests/TrainingUnitTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "test&#x5929;&#x6c17;&#x4e88;&#x5831;&#x304c;sunny&#x3060;&#x3063;&#x305f;&#x3089;&#x6674;&#x308c;&#x753b;&#x50cf;&#x3092;&#x8868;&#x793a;&#x3059;&#x308b;()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
