@@ -61,8 +61,8 @@ class YumemiForecast: ForecastProtocol {
             print(error)
             return nil
         }
-        if let jsonData = jsonData {
-            let jsonString = String(data: jsonData, encoding: .utf8)!
+        if let jsonDataExist = jsonData {
+            let jsonString = String(data: jsonDataExist, encoding: .utf8)!
             return jsonString
         } else {
             return nil
@@ -80,9 +80,9 @@ class YumemiForecast: ForecastProtocol {
             let dateFormatter = ISO8601DateFormatter()
             let dtString: String = dateFormatter.string(from: Date())
             let jsonString = toJsonString(ServeInfo(area: "tokyo", date: dtString))
-            if let jsonString = jsonString {
+            if let jsonStringExist = jsonString {
                 //Json文字列を引数にAPI呼び出し、天気取得
-                try weather = YumemiWeather.fetchWeather(jsonString)
+                try weather = YumemiWeather.fetchWeather(jsonStringExist)
             }
             //受け取ったJson文字列をオブジェクトに変換（デコード）
             guard let weatherData = weather else {
@@ -116,45 +116,9 @@ class YumemiForecast: ForecastProtocol {
                 return UIImage(named: "sunny")?.withTintColor(UIColor.red)
             }
         } else {
+            print("receiveInfoは存在しません")
             return nil
         }
-    }
-    
-}
-
-//処理を任せるクラス
-class Forecast {
-    private var impl: ForecastProtocol? = nil
-    
-    init (_ selectedClass: ForecastProtocol) {
-        self.impl = selectedClass
-    }
-    
-    func doFetchWeather()  {
-        if let dg = self.impl {
-            return dg.fetchWeather()
-        } else {
-            print("delegate実行不可")
-        }
-    }
-    
-    func doGetWeatherIcon() -> UIImage? {
-        if let dg = self.impl {
-            return dg.getWeatherIcon()
-        } else {
-            print("delegate実行不可")
-            return nil
-        }
-    }
-    
-    //errorMessageを返すメソッド
-    func errorMessage() -> String? {
-        return impl?.errorMessage
-    }
-    
-    //receiveIndoを返すメソッド
-    func receiveInfo() -> ReceiveInfo? {
-        return impl?.receiveInfo
     }
     
 }
@@ -175,14 +139,19 @@ class ViewController: UIViewController {
     @IBOutlet var minTemperature: UILabel!
     @IBOutlet var date: UILabel!
     
-    func updateForecast() {
-        var weatherIcon: UIImage? = nil
-        //処理を任せるクラスのインスタンス生成と今回処理を任されるクラスの紐付け
-        let forecast = Forecast(YumemiForecast())
-        forecast.doFetchWeather()
-        
+    private var defaultForecast: ForecastProtocol = YumemiForecast()
+    var receiveInfo: ReceiveInfo?
+    var weatherIcon: UIImage?
+    
+    func updateForecast(_ forecast: ForecastProtocol) {
+        forecast.fetchWeather()
+        receiveInfo = forecast.receiveInfo
+        weatherIcon = forecast.getWeatherIcon()
+    }
+    
+    func displayForecast(_ forecast: ForecastProtocol) {
         //exceptionルートを通っていたらUIArertControllerでエラー表示
-        if let message = forecast.errorMessage()  {
+        if let message = forecast.errorMessage {
             //UIAlertController生成クラスの呼び出し
             let createAlertController = CreateAlertController()
             let alertController = createAlertController.create(message)
@@ -190,11 +159,10 @@ class ViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
             return
         }
-        //exceptionのルートを通っていなかったら天気画像を取得し、日時・気温とともに表示
-        if let receiveInfoExist = forecast.receiveInfo() {
-            weatherIcon = forecast.doGetWeatherIcon()
-            if let icon = weatherIcon {
-                weather.image = icon
+        //通っていなかったら取得情報のラベル等への埋め込み
+        if let receiveInfoExist = receiveInfo {
+            if let weatherIcon = weatherIcon {
+                weather.image = weatherIcon
             }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -206,12 +174,14 @@ class ViewController: UIViewController {
     
     //バックグラウンドからフォアグラウンドに戻った際に実行される処理
     @objc func handleWillEnterForeground(notification: Notification) {
-        updateForecast()
+        updateForecast(defaultForecast)
+        displayForecast(defaultForecast)
     }
     
     //Reloadボタンが押下された際に実行される処理
     @IBAction func reloadButtonTapped(_ sender: Any) {
-        updateForecast()
+        updateForecast(defaultForecast)
+        displayForecast(defaultForecast)
     }
     
     //天気予報画面を閉じる
