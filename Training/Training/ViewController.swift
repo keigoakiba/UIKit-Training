@@ -181,18 +181,24 @@ class ViewController: UIViewController {
     //バックグラウンドからフォアグラウンドに戻った際に実行される処理
     @objc func handleWillEnterForeground(notification: Notification) {
         activityIndicator.startAnimating()
-        updateForecast(defaultForecast)
-        displayForecast(defaultForecast)
-        activityIndicator.stopAnimating()
+        //startAnimating()を実行させる猶予時間を設定
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
+            if let dForecast = self?.defaultForecast {
+                self?.updateForecast(dForecast)
+                self?.displayForecast(dForecast)
+            }
+            self?.activityIndicator.stopAnimating()
+        }
     }
     
     //Reloadボタンが押下された際に実行される処理
     @IBAction func reloadButtonTapped(_ sender: Any) {
         activityIndicator.startAnimating()
+        //startAnimating()を実行させる猶予時間を設定
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
-            if let dForecat = self?.defaultForecast {
-                self?.updateForecast(dForecat)
-                self?.displayForecast(dForecat)
+            if let dForecast = self?.defaultForecast {
+                self?.updateForecast(dForecast)
+                self?.displayForecast(dForecast)
             }
             self?.activityIndicator.stopAnimating()
         }
