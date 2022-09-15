@@ -82,7 +82,7 @@ class YumemiForecast: ForecastProtocol {
             let jsonString = toJsonString(ServeInfo(area: "tokyo", date: dtString))
             if let jsonStringExist = jsonString {
                 //Json文字列を引数にAPI呼び出し、天気取得
-                try weather = YumemiWeather.fetchWeather(jsonStringExist)
+                try weather = YumemiWeather.syncFetchWeather(jsonStringExist)
             }
             //受け取ったJson文字列をオブジェクトに変換（デコード）
             guard let weatherData = weather else {
@@ -126,6 +126,17 @@ class YumemiForecast: ForecastProtocol {
 //実際に処理が動くクラス(画面)
 class ViewController: UIViewController {
     
+    @IBOutlet var weather: UIImageView!
+    @IBOutlet var maxTemperature: UILabel!
+    @IBOutlet var minTemperature: UILabel!
+    @IBOutlet var date: UILabel!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView! {
+        didSet {
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.color = .red
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self,
@@ -133,11 +144,6 @@ class ViewController: UIViewController {
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
     }
-    
-    @IBOutlet var weather: UIImageView!
-    @IBOutlet var maxTemperature: UILabel!
-    @IBOutlet var minTemperature: UILabel!
-    @IBOutlet var date: UILabel!
     
     private var defaultForecast: ForecastProtocol = YumemiForecast()
     var receiveInfo: ReceiveInfo?
@@ -174,14 +180,22 @@ class ViewController: UIViewController {
     
     //バックグラウンドからフォアグラウンドに戻った際に実行される処理
     @objc func handleWillEnterForeground(notification: Notification) {
+        activityIndicator.startAnimating()
         updateForecast(defaultForecast)
         displayForecast(defaultForecast)
+        activityIndicator.stopAnimating()
     }
     
     //Reloadボタンが押下された際に実行される処理
     @IBAction func reloadButtonTapped(_ sender: Any) {
-        updateForecast(defaultForecast)
-        displayForecast(defaultForecast)
+        activityIndicator.startAnimating()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
+            if let dForecat = self?.defaultForecast {
+                self?.updateForecast(dForecat)
+                self?.displayForecast(dForecat)
+            }
+            self?.activityIndicator.stopAnimating()
+        }
     }
     
     //天気予報画面を閉じる
