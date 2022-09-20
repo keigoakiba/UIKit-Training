@@ -39,7 +39,7 @@ protocol ForecastProtocol: AnyObject {
     //取得した情報(オブジェクト形式)を格納する変数
     var receiveInfo: ReceiveInfo? { get }
     func toJsonString(_ serveInfo: ServeInfo) -> String?
-    func fetchWeather()
+    func fetchWeather(completion: () -> ())
     func getWeatherIcon() -> UIImage?
 }
 
@@ -70,7 +70,7 @@ class YumemiForecast: ForecastProtocol {
     }
     
     //API取得、デコード
-    func fetchWeather() {
+    func fetchWeather(completion: () -> ()) {
         var weather: String?
         do {
             errorMessage = nil
@@ -100,6 +100,7 @@ class YumemiForecast: ForecastProtocol {
             errorMessage = "予期せぬエラーが発生しました"
             print(error)
         }
+        completion()
     }
     
     //画像を取得
@@ -150,9 +151,10 @@ class ViewController: UIViewController {
     var weatherIcon: UIImage?
     
     func updateForecast(_ forecast: ForecastProtocol) {
-        forecast.fetchWeather()
-        receiveInfo = forecast.receiveInfo
-        weatherIcon = forecast.getWeatherIcon()
+        forecast.fetchWeather {
+            receiveInfo = forecast.receiveInfo
+            weatherIcon = forecast.getWeatherIcon()
+        }
     }
     
     func displayForecast(_ forecast: ForecastProtocol) {
@@ -178,12 +180,11 @@ class ViewController: UIViewController {
         }
     }
     
-    //バックグラウンドからフォアグラウンドに戻った際に実行される処理
-    @objc func handleWillEnterForeground(notification: Notification) {
+    func forecastHandler(_ forecast: ForecastProtocol?) {
         activityIndicator.startAnimating()
         //startAnimating()を実行させる猶予時間を設定
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
-            if let dForecast = self?.defaultForecast {
+            if let dForecast = forecast {
                 self?.updateForecast(dForecast)
                 self?.displayForecast(dForecast)
             }
@@ -191,17 +192,14 @@ class ViewController: UIViewController {
         }
     }
     
+    //バックグラウンドからフォアグラウンドに戻った際に実行される処理
+    @objc func handleWillEnterForeground(notification: Notification) {
+        forecastHandler(defaultForecast)
+    }
+    
     //Reloadボタンが押下された際に実行される処理
     @IBAction func reloadButtonTapped(_ sender: Any) {
-        activityIndicator.startAnimating()
-        //startAnimating()を実行させる猶予時間を設定
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
-            if let dForecast = self?.defaultForecast {
-                self?.updateForecast(dForecast)
-                self?.displayForecast(dForecast)
-            }
-            self?.activityIndicator.stopAnimating()
-        }
+        forecastHandler(defaultForecast)
     }
     
     //天気予報画面を閉じる
