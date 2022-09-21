@@ -37,7 +37,6 @@ protocol ForecastProtocol: AnyObject {
     //AlertController表示に使用する変数
     var errorMessage: String? { get }
     //取得した情報(オブジェクト形式)を格納する変数
-   // var receiveInfo: ReceiveInfo? { get }
     func toJsonString(_ serveInfo: ServeInfo) -> String?
     func fetchWeather(completion: (ReceiveInfo?) -> ())
     func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage?
@@ -48,7 +47,6 @@ protocol ForecastProtocol: AnyObject {
 class YumemiForecast: ForecastProtocol {
     
     var errorMessage: String?
-   // var receiveInfo: ReceiveInfo?
     
     //オブジェクトからJson形式へ変換（エンコード）
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
