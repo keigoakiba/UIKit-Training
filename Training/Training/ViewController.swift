@@ -37,10 +37,10 @@ protocol ForecastProtocol: AnyObject {
     //AlertController表示に使用する変数
     var errorMessage: String? { get }
     //取得した情報(オブジェクト形式)を格納する変数
-    var receiveInfo: ReceiveInfo? { get }
+   // var receiveInfo: ReceiveInfo? { get }
     func toJsonString(_ serveInfo: ServeInfo) -> String?
-    func fetchWeather(completion: () -> ())
-    func getWeatherIcon() -> UIImage?
+    func fetchWeather(completion: (ReceiveInfo?) -> ())
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage?
 }
 
 
@@ -48,7 +48,7 @@ protocol ForecastProtocol: AnyObject {
 class YumemiForecast: ForecastProtocol {
     
     var errorMessage: String?
-    var receiveInfo: ReceiveInfo?
+   // var receiveInfo: ReceiveInfo?
     
     //オブジェクトからJson形式へ変換（エンコード）
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
@@ -70,11 +70,11 @@ class YumemiForecast: ForecastProtocol {
     }
     
     //API取得、デコード
-    func fetchWeather(completion: () -> ()) {
+    func fetchWeather(completion: (ReceiveInfo?) -> ()) {
         var weather: String?
+        errorMessage = nil
+        var receiveInfo: ReceiveInfo? = nil
         do {
-            errorMessage = nil
-            receiveInfo = nil
             //オブジェクトからJson形式へ変換（エンコード）
             //↓ DateFormatter() かつ dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ" でも対応可能
             let dateFormatter = ISO8601DateFormatter()
@@ -100,11 +100,11 @@ class YumemiForecast: ForecastProtocol {
             errorMessage = "予期せぬエラーが発生しました"
             print(error)
         }
-        completion()
+        completion(receiveInfo)
     }
     
     //画像を取得
-    func getWeatherIcon() -> UIImage? {
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         if let weatherResult = receiveInfo {
             switch weatherResult.weatherCondition {
             case "sunny":
@@ -151,9 +151,9 @@ class ViewController: UIViewController {
     var weatherIcon: UIImage?
     
     func updateForecast(_ forecast: ForecastProtocol) {
-        forecast.fetchWeather {
-            receiveInfo = forecast.receiveInfo
-            weatherIcon = forecast.getWeatherIcon()
+        forecast.fetchWeather { rInfo in
+            receiveInfo = rInfo
+            weatherIcon = forecast.getWeatherIcon(receiveInfo)
         }
     }
     
@@ -180,11 +180,11 @@ class ViewController: UIViewController {
         }
     }
     
-    func forecastHandler(_ forecast: ForecastProtocol?) {
+    func forecastHandler() {
         activityIndicator.startAnimating()
         //startAnimating()を実行させる猶予時間を設定
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
-            if let dForecast = forecast {
+            if let dForecast = self?.defaultForecast {
                 self?.updateForecast(dForecast)
                 self?.displayForecast(dForecast)
             }
@@ -194,12 +194,12 @@ class ViewController: UIViewController {
     
     //バックグラウンドからフォアグラウンドに戻った際に実行される処理
     @objc func handleWillEnterForeground(notification: Notification) {
-        forecastHandler(defaultForecast)
+        forecastHandler()
     }
     
     //Reloadボタンが押下された際に実行される処理
     @IBAction func reloadButtonTapped(_ sender: Any) {
-        forecastHandler(defaultForecast)
+        forecastHandler()
     }
     
     //天気予報画面を閉じる
