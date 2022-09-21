@@ -12,17 +12,16 @@ import UIKit
 class Sunny: ForecastProtocol {
     
     var errorMessage: String?
-    var receiveInfo: ReceiveInfo?
     
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
         return nil
     }
     
-    func fetchWeather() {
-        
+    func fetchWeather(completion: (ReceiveInfo?) -> ()) {
+        completion(nil)
     }
     
-    func getWeatherIcon() -> UIImage? {
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         return UIImage(named: "sunny")?.withTintColor(UIColor.red)
     }
     
@@ -31,17 +30,16 @@ class Sunny: ForecastProtocol {
 class Cloudy: ForecastProtocol {
     
     var errorMessage: String?
-    var receiveInfo: ReceiveInfo?
     
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
         return nil
     }
     
-    func fetchWeather() {
-        
+    func fetchWeather(completion: (ReceiveInfo?) -> ()) {
+        completion(nil)
     }
     
-    func getWeatherIcon() -> UIImage? {
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         return UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
     }
     
@@ -50,17 +48,16 @@ class Cloudy: ForecastProtocol {
 class Rainy: ForecastProtocol {
     
     var errorMessage: String?
-    var receiveInfo: ReceiveInfo?
     
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
         return nil
     }
     
-    func fetchWeather() {
-        
+    func fetchWeather(completion: (ReceiveInfo?) -> ()) {
+        completion(nil)
     }
     
-    func getWeatherIcon() -> UIImage? {
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         return UIImage(named: "rainy")?.withTintColor(UIColor.blue)
     }
     
@@ -70,17 +67,17 @@ class Rainy: ForecastProtocol {
 class MaxTemperature: ForecastProtocol {
     
     var errorMessage: String?
-    var receiveInfo: ReceiveInfo?
     
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
         return nil
     }
     
-    func fetchWeather() {
-        receiveInfo = ReceiveInfo(weatherCondition: "sunny", maxTemperature: 30, minTemperature: 10, date: Date())
+    func fetchWeather(completion: (ReceiveInfo?) -> ()) {
+        let receiveInfo = ReceiveInfo(weatherCondition: "sunny", maxTemperature: 30, minTemperature: 10, date: Date())
+        completion(receiveInfo)
     }
     
-    func getWeatherIcon() -> UIImage? {
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         return nil
     }
     
@@ -89,17 +86,17 @@ class MaxTemperature: ForecastProtocol {
 class MinTemperature: ForecastProtocol {
     
     var errorMessage: String?
-    var receiveInfo: ReceiveInfo?
     
     func toJsonString(_ serveInfo: ServeInfo) -> String? {
         return nil
     }
     
-    func fetchWeather() {
-        receiveInfo = ReceiveInfo(weatherCondition: "sunny", maxTemperature: 20, minTemperature: 0, date: Date())
+    func fetchWeather(completion: (ReceiveInfo?) -> ()) {
+        let receiveInfo = ReceiveInfo(weatherCondition: "sunny", maxTemperature: 20, minTemperature: 0, date: Date())
+        completion(receiveInfo)
     }
     
-    func getWeatherIcon() -> UIImage? {
+    func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         return nil
     }
     
