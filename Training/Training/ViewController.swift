@@ -38,7 +38,7 @@ struct ReceiveInfo: Codable {
 
 struct InfoSet: Codable {
     var area: String
-    var info: [ReceiveInfo]
+    var info: ReceiveInfo
 }
 
 //プロトコル
@@ -53,14 +53,7 @@ protocol ForecastProtocol: AnyObject {
     func fetchWeatherList(completion: ([InfoSet]?) -> ())
     //取得結果からアイコンを取得する
     func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage?
-    func getWeatherIconListVer(_ receiveInfoList: InfoSet?) -> UIImage?
 }
-/*
-extension ForecastProtocol {
-    func fetchWeatherList(completion: (ReceiveInfo?) -> ()) {
-    }
-}
-*/
 
 //処理内容を記した、処理を任されるクラスその1
 class YumemiForecast: ForecastProtocol {
@@ -143,7 +136,7 @@ class YumemiForecast: ForecastProtocol {
     func fetchWeatherList(completion: ([InfoSet]?) -> ()) {
         var weather: String?
         errorMessage = nil
-        var InfoSetList: [InfoSet]? = nil
+        var infoSetList: [InfoSet]? = nil
         do {
             //オブジェクトからJson形式へ変換（エンコード）
             //↓ DateFormatter() かつ dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ" でも対応可能
@@ -161,7 +154,7 @@ class YumemiForecast: ForecastProtocol {
             let jsonData = weatherData.data(using: .utf8)!
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            InfoSetList = try decoder.decode(InfoSet.self, from: jsonData)
+            infoSetList = try decoder.decode([InfoSet].self, from: jsonData)
         } catch (YumemiWeatherError.invalidParameterError) {
             errorMessage = "invalidParameterErrorが発生しました"
         } catch (YumemiWeatherError.unknownError) {
@@ -170,7 +163,7 @@ class YumemiForecast: ForecastProtocol {
             errorMessage = "予期せぬエラーが発生しました"
             print(error)
         }
-        completion(InfoSetList)
+        completion(infoSetList)
     }
     
     //画像を取得
@@ -192,39 +185,17 @@ class YumemiForecast: ForecastProtocol {
         }
     }
     
-    //画像を取得
-    func getWeatherIconListVer(_ InfoSetList: InfoSet?) -> UIImage? {
-        if let weatherResult = InfoSetList {
-            var image: UIImage?
-            for item in weatherResult.info {
-                switch item.weatherCondition {
-                case "sunny":
-                    image = UIImage(named: "sunny")?.withTintColor(UIColor.red)
-                case "cloudy":
-                    image = UIImage(named: "cloudy")?.withTintColor(UIColor.gray)
-                case "rainy":
-                    image = UIImage(named: "rainy")?.withTintColor(UIColor.blue)
-                default:
-                    image = UIImage(named: "sunny")?.withTintColor(UIColor.red)
-                }
-            }
-            print(image)
-            return image
-        } else {
-            print("receiveInfoListは存在しません")
-            return nil
-        }
-    }
-    
 }
 
 //実際に処理が動くクラス(画面)
 class ViewController: UIViewController {
     
+    @IBOutlet var area: UILabel!
     @IBOutlet var weather: UIImageView!
     @IBOutlet var maxTemperature: UILabel!
     @IBOutlet var minTemperature: UILabel!
     @IBOutlet var date: UILabel!
+    
     @IBOutlet var activityIndicator: UIActivityIndicatorView! {
         didSet {
             activityIndicator.hidesWhenStopped = true
@@ -238,16 +209,20 @@ class ViewController: UIViewController {
                                                selector: #selector(handleWillEnterForeground(notification:)),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
+        displayForecast(defaultForecast)
     }
     
     private var defaultForecast: ForecastProtocol = YumemiForecast()
-    var receiveInfo: ReceiveInfo?
-    var weatherIcon: UIImage?
+    private var receiveInfo: ReceiveInfo?
+    var infoSet: InfoSet? {
+        didSet {
+            receiveInfo = infoSet?.info
+        }
+    }
     
     func updateForecast(_ forecast: ForecastProtocol) {
         forecast.fetchWeather { rInfo in
             receiveInfo = rInfo
-            weatherIcon = forecast.getWeatherIcon(receiveInfo)
         }
     }
     
@@ -263,9 +238,10 @@ class ViewController: UIViewController {
         }
         //通っていなかったら取得情報のラベル等への埋め込み
         if let receiveInfoExist = receiveInfo {
-            if let weatherIcon = weatherIcon {
+            if let weatherIcon =  forecast.getWeatherIcon(receiveInfo) {
                 weather.image = weatherIcon
             }
+            area.text = infoSet?.area
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
