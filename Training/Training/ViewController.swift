@@ -267,15 +267,18 @@ class ViewController: UIViewController {
         forecastHandler()
     }
     
+    /*
     //Reloadボタンが押下された際に実行される処理
     @IBAction func reloadButtonTapped(_ sender: Any) {
         forecastHandler()
     }
+     
     
     //天気予報画面を閉じる
     @IBAction func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
+    */
     
     //ログ出力
     deinit {

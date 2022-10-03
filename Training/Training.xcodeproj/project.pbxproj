@@ -98,17 +98,17 @@
 		73772103288F80E60057786D /* Training */ = {
 			isa = PBXGroup;
 			children = (
-				732D4B7228E42B1700AAF223 /* MyPlayground.playground */,
-				73772104288F80E60057786D /* AppDelegate.swift */,
-				73772106288F80E60057786D /* SceneDelegate.swift */,
-				73772108288F80E60057786D /* ViewController.swift */,
 				7377210A288F80E60057786D /* Main.storyboard */,
+				7377210F288F80E70057786D /* LaunchScreen.storyboard */,
+				73772108288F80E60057786D /* ViewController.swift */,
 				7334344128E3E67A004C9DB3 /* TableViewController.swift */,
 				7339727628939872005447F3 /* PreviousDisplayViewViewController.swift */,
 				734AA4D228B342E600E063B4 /* CreateAlert.swift */,
+				73772104288F80E60057786D /* AppDelegate.swift */,
+				73772106288F80E60057786D /* SceneDelegate.swift */,
 				7377210D288F80E70057786D /* Assets.xcassets */,
-				7377210F288F80E70057786D /* LaunchScreen.storyboard */,
 				73772112288F80E70057786D /* Info.plist */,
+				732D4B7228E42B1700AAF223 /* MyPlayground.playground */,
 			);
 			path = Training;
 			sourceTree = "<group>";
