@@ -15,6 +15,11 @@ struct ServeInfo: Codable {
     var date: String
 }
 
+struct ServeInfoList: Codable {
+    var areas: [String]
+    var date: String
+}
+
 //APIから受け取るJson文字列の器
 struct ReceiveInfo: Codable {
     var weatherCondition: String
@@ -29,19 +34,26 @@ struct ReceiveInfo: Codable {
         case minTemperature = "min_temperature"
         case date = "date"
     }
-    
+}
+
+struct InfoSet: Codable {
+    var area: String
+    var info: ReceiveInfo
 }
 
 //プロトコル
 protocol ForecastProtocol: AnyObject {
     //AlertController表示に使用する変数
     var errorMessage: String? { get }
-    //取得した情報(オブジェクト形式)を格納する変数
+    //取得した情報(オブジェクト形式)を格納する
     func toJsonString(_ serveInfo: ServeInfo) -> String?
+    func toJsonStringList(_ serveInfoList: ServeInfoList) -> String?
+    //API叩く
     func fetchWeather(completion: (ReceiveInfo?) -> ())
+    func fetchWeatherList(completion: ([InfoSet]?) -> ())
+    //取得結果からアイコンを取得する
     func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage?
 }
-
 
 //処理内容を記した、処理を任されるクラスその1
 class YumemiForecast: ForecastProtocol {
@@ -66,6 +78,26 @@ class YumemiForecast: ForecastProtocol {
             return nil
         }
     }
+    
+    //オブジェクトからJson形式へ変換（エンコード）
+    func toJsonStringList(_ serveInfoList: ServeInfoList) -> String? {
+        var jsonData: Data?
+        let encoder = JSONEncoder()
+        do {
+            jsonData = try encoder.encode(serveInfoList)
+        } catch {
+            errorMessage = "予期せぬエラーが発生しました"
+            print(error)
+            return nil
+        }
+        if let jsonDataExist = jsonData {
+            let jsonString = String(data: jsonDataExist, encoding: .utf8)!
+            return jsonString
+        } else {
+            return nil
+        }
+    }
+    
     
     //API取得、デコード
     func fetchWeather(completion: (ReceiveInfo?) -> ()) {
@@ -101,6 +133,39 @@ class YumemiForecast: ForecastProtocol {
         completion(receiveInfo)
     }
     
+    func fetchWeatherList(completion: ([InfoSet]?) -> ()) {
+        var weather: String?
+        errorMessage = nil
+        var infoSetList: [InfoSet]? = nil
+        do {
+            //オブジェクトからJson形式へ変換（エンコード）
+            //↓ DateFormatter() かつ dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ" でも対応可能
+            let dateFormatter = ISO8601DateFormatter()
+            let dtString: String = dateFormatter.string(from: Date())
+            let jsonString = toJsonStringList(ServeInfoList(areas: ["Tokyo","Osaka","Nagoya"], date: dtString))
+            if let jsonStringExist = jsonString {
+                //Json文字列を引数にAPI呼び出し、天気取得
+                try weather = YumemiWeather.fetchWeatherList(jsonStringExist)
+            }
+            //受け取ったJson文字列をオブジェクトに変換（デコード）
+            guard let weatherData = weather else {
+                return
+            }
+            let jsonData = weatherData.data(using: .utf8)!
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            infoSetList = try decoder.decode([InfoSet].self, from: jsonData)
+        } catch (YumemiWeatherError.invalidParameterError) {
+            errorMessage = "invalidParameterErrorが発生しました"
+        } catch (YumemiWeatherError.unknownError) {
+            errorMessage = "unknownErrorが発生しました"
+        } catch {
+            errorMessage = "予期せぬエラーが発生しました"
+            print(error)
+        }
+        completion(infoSetList)
+    }
+    
     //画像を取得
     func getWeatherIcon(_ receiveInfo: ReceiveInfo?) -> UIImage? {
         if let weatherResult = receiveInfo {
@@ -125,10 +190,12 @@ class YumemiForecast: ForecastProtocol {
 //実際に処理が動くクラス(画面)
 class ViewController: UIViewController {
     
+    @IBOutlet var area: UILabel!
     @IBOutlet var weather: UIImageView!
     @IBOutlet var maxTemperature: UILabel!
     @IBOutlet var minTemperature: UILabel!
     @IBOutlet var date: UILabel!
+    
     @IBOutlet var activityIndicator: UIActivityIndicatorView! {
         didSet {
             activityIndicator.hidesWhenStopped = true
@@ -142,16 +209,20 @@ class ViewController: UIViewController {
                                                selector: #selector(handleWillEnterForeground(notification:)),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
+        displayForecast(defaultForecast)
     }
     
     private var defaultForecast: ForecastProtocol = YumemiForecast()
-    var receiveInfo: ReceiveInfo?
-    var weatherIcon: UIImage?
+    private var receiveInfo: ReceiveInfo?
+    var infoSet: InfoSet? {
+        didSet {
+            receiveInfo = infoSet?.info
+        }
+    }
     
     func updateForecast(_ forecast: ForecastProtocol) {
         forecast.fetchWeather { rInfo in
             receiveInfo = rInfo
-            weatherIcon = forecast.getWeatherIcon(receiveInfo)
         }
     }
     
@@ -167,9 +238,10 @@ class ViewController: UIViewController {
         }
         //通っていなかったら取得情報のラベル等への埋め込み
         if let receiveInfoExist = receiveInfo {
-            if let weatherIcon = weatherIcon {
+            if let weatherIcon =  forecast.getWeatherIcon(receiveInfo) {
                 weather.image = weatherIcon
             }
+            area.text = infoSet?.area
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             date.text = "\(dateFormatter.string(from: receiveInfoExist.date))"
@@ -193,16 +265,6 @@ class ViewController: UIViewController {
     //バックグラウンドからフォアグラウンドに戻った際に実行される処理
     @objc func handleWillEnterForeground(notification: Notification) {
         forecastHandler()
-    }
-    
-    //Reloadボタンが押下された際に実行される処理
-    @IBAction func reloadButtonTapped(_ sender: Any) {
-        forecastHandler()
-    }
-    
-    //天気予報画面を閉じる
-    @IBAction func closeButtonTapped() {
-        self.dismiss(animated: true, completion: nil)
     }
     
     //ログ出力
